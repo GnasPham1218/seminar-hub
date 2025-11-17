@@ -35,13 +35,13 @@ pip install fastapi strawberry-graphql[fastapi] motor bcrypt pydantic-settings u
 
 ```env
 MONGO_DB_URI=mongodb://localhost:27017
-MONGO_DB_NAME=scientific_conference_db
+MONGO_DB_NAME=QLSK
 ```
 
 3. **Run the application:**
 
 ```bash
-uvicorn main:app --reload
+uvicorn src.main:app --reload
 ```
 
 ### API Endpoint
