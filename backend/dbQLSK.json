@@ -1,0 +1,219 @@
+{
+    "users": [
+        {
+            "_id": "u001",
+            "name": "Nguyễn Văn An",
+            "email": "an.nguyen@hust.edu.vn",
+            "password": "hashed_password_123",
+            "role": "researcher",
+            "organization": "Đại học Bách Khoa Hà Nội",
+            "phone": "0987654321",
+            "registered_events": ["e001", "e002"],
+            "created_at": "2025-01-15T10:30:00Z",
+            "updated_at": "2025-11-10T14:20:00Z"
+        },
+        {
+            "_id": "u002",
+            "name": "Trần Thị Bình",
+            "email": "binh.tran@hcmus.edu.vn",
+            "password": "hashed_password_456",
+            "role": "speaker",
+            "organization": "Đại học Khoa học Tự nhiên TP.HCM",
+            "phone": "0912345678",
+            "registered_events": ["e002"],
+            "created_at": "2025-02-20T09:00:00Z",
+            "updated_at": "2025-11-11T16:45:00Z"
+        },
+        {
+            "_id": "u003",
+            "name": "Lê Minh Hoàng",
+            "email": "hoang.le@vnuhcm.edu.vn",
+            "password": "hashed_password_789",
+            "role": "admin",
+            "organization": "Ban Tổ chức Hội thảo",
+            "phone": "0905123456",
+            "registered_events": [],
+            "created_at": "2024-12-01T08:00:00Z",
+            "updated_at": "2025-11-12T07:00:00Z"
+        },
+        {
+            "_id": "u004",
+            "name": "Phạm Thị Lan",
+            "email": "lan.pham@gmail.com",
+            "password": "hashed_password_abc",
+            "role": "attendee",
+            "organization": "Công ty TNHH ABC",
+            "phone": "0908765432",
+            "registered_events": ["e001"],
+            "created_at": "2025-10-18T14:20:00Z",
+            "updated_at": "2025-11-10T09:15:00Z"
+        }
+    ],
+    "events": [
+        {
+            "_id": "e001",
+            "title": "Hội thảo Công nghệ Trí tuệ Nhân tạo 2025",
+            "description": "Sự kiện quy tụ các chuyên gia về AI, Machine Learning, và ứng dụng trong công nghiệp.",
+            "start_date": "2025-12-01T08:00:00Z",
+            "end_date": "2025-12-02T17:00:00Z",
+            "location": "Trung tâm Hội nghị Quốc gia, Hà Nội",
+            "organizer_id": "u003",
+            "max_participants": 500,
+            "current_participants": 2,
+            "status": "upcoming",
+            "created_at": "2025-09-15T10:00:00Z",
+            "updated_at": "2025-11-10T14:30:00Z"
+        },
+        {
+            "_id": "e002",
+            "title": "Hội nghị Khoa học Máy tính Mở Rộng",
+            "description": "Chia sẻ các nghiên cứu mới trong lĩnh vực Khoa học máy tính và Hệ thống thông tin.",
+            "start_date": "2025-11-20T09:00:00Z",
+            "end_date": "2025-11-21T16:00:00Z",
+            "location": "Đại học Quốc Gia TP.HCM",
+            "organizer_id": "u003",
+            "max_participants": 300,
+            "current_participants": 2,
+            "status": "ongoing",
+            "created_at": "2025-08-10T08:00:00Z",
+            "updated_at": "2025-11-20T09:15:00Z"
+        }
+    ],
+    "sessions": [
+        {
+            "_id": "s001",
+            "event_id": "e001",
+            "title": "Ứng dụng AI trong Y tế",
+            "description": "Khám phá các ứng dụng tiên tiến của AI trong chẩn đoán và điều trị y khoa",
+            "speaker_id": "u002",
+            "start_time": "2025-12-01T09:00:00Z",
+            "end_time": "2025-12-01T10:30:00Z",
+            "room": "Phòng A1",
+            "topics": ["AI", "Healthcare"],
+            "created_at": "2025-10-01T10:00:00Z",
+            "updated_at": "2025-11-10T15:00:00Z"
+        },
+        {
+            "_id": "s002",
+            "event_id": "e001",
+            "title": "Machine Learning và Dữ liệu lớn",
+            "description": "Các kỹ thuật và công cụ xử lý Big Data với Machine Learning",
+            "speaker_id": "u002",
+            "start_time": "2025-12-02T13:30:00Z",
+            "end_time": "2025-12-02T15:00:00Z",
+            "room": "Phòng B3",
+            "topics": ["Machine Learning", "Big Data"],
+            "created_at": "2025-10-01T11:00:00Z",
+            "updated_at": "2025-11-11T09:30:00Z"
+        },
+        {
+            "_id": "s003",
+            "event_id": "e002",
+            "title": "Phân tích dữ liệu nâng cao với Python",
+            "description": "Workshop thực hành về pandas, numpy và visualization",
+            "speaker_id": "u002",
+            "start_time": "2025-11-20T10:00:00Z",
+            "end_time": "2025-11-20T12:00:00Z",
+            "room": "Hội trường 2",
+            "topics": ["Python", "Data Science"],
+            "created_at": "2025-09-15T09:00:00Z",
+            "updated_at": "2025-11-20T12:30:00Z"
+        }
+    ],
+    "papers": [
+        {
+            "_id": "p001",
+            "title": "AI trong xử lý ảnh y khoa",
+            "author_ids": ["u001"],
+            "abstract": "Bài báo nghiên cứu ứng dụng Deep Learning trong phân tích hình ảnh X-quang.",
+            "keywords": ["AI", "Deep Learning", "Y tế"],
+            "file_url": "https://example.com/papers/ai_y_te.pdf",
+            "event_id": "e001",
+            "session_id": "s001",
+            "status": "approved",
+            "submission_date": "2025-10-15T14:30:00Z",
+            "created_at": "2025-10-15T14:30:00Z",
+            "updated_at": "2025-11-05T10:15:00Z"
+        },
+        {
+            "_id": "p002",
+            "title": "Phân tích dữ liệu với Python và Pandas",
+            "author_ids": ["u002"],
+            "abstract": "Giới thiệu các kỹ thuật phân tích dữ liệu và tối ưu hiệu năng với Pandas.",
+            "keywords": ["Python", "Pandas", "Data Analysis"],
+            "file_url": "https://example.com/papers/python_pandas.pdf",
+            "event_id": "e002",
+            "session_id": "s003",
+            "status": "pending",
+            "submission_date": "2025-10-20T09:15:00Z",
+            "created_at": "2025-10-20T09:15:00Z",
+            "updated_at": "2025-11-10T16:20:00Z"
+        }
+    ],
+    "registrations": [
+        {
+            "_id": "r001",
+            "event_id": "e001",
+            "user_id": "u001",
+            "registration_date": "2025-10-20T13:00:00Z",
+            "status": "confirmed",
+            "payment_status": "paid",
+            "payment_amount": 1500000,
+            "created_at": "2025-10-20T13:00:00Z",
+            "updated_at": "2025-10-20T14:35:00Z"
+        },
+        {
+            "_id": "r002",
+            "event_id": "e002",
+            "user_id": "u001",
+            "registration_date": "2025-11-01T09:45:00Z",
+            "status": "confirmed",
+            "payment_status": "paid",
+            "payment_amount": 1500000,
+            "created_at": "2025-11-01T09:45:00Z",
+            "updated_at": "2025-11-21T17:05:00Z"
+        },
+        {
+            "_id": "r003",
+            "event_id": "e002",
+            "user_id": "u002",
+            "registration_date": "2025-11-05T10:20:00Z",
+            "status": "confirmed",
+            "payment_status": "paid",
+            "payment_amount": 1500000,
+            "created_at": "2025-11-05T10:20:00Z",
+            "updated_at": "2025-11-05T10:25:00Z"
+        },
+        {
+            "_id": "r004",
+            "event_id": "e001",
+            "user_id": "u004",
+            "registration_date": "2025-10-18T15:00:00Z",
+            "status": "confirmed",
+            "payment_status": "paid",
+            "payment_amount": 1500000,
+            "created_at": "2025-10-18T15:00:00Z",
+            "updated_at": "2025-10-18T15:10:00Z"
+        }
+    ],
+    "feedbacks": [
+        {
+            "_id": "f001",
+            "event_id": "e001",
+            "session_id": "s001",
+            "user_id": "u001",
+            "rating": 5,
+            "comment": "Tổ chức rất chuyên nghiệp, nội dung chất lượng!",
+            "created_at": "2025-12-03T10:00:00Z"
+        },
+        {
+            "_id": "f002",
+            "event_id": "e002",
+            "session_id": "s003",
+            "user_id": "u002",
+            "rating": 4,
+            "comment": "Hội nghị hữu ích, nhưng âm thanh hơi nhỏ.",
+            "created_at": "2025-11-21T18:30:00Z"
+        }
+    ]
+}

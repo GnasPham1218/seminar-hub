@@ -1,0 +1,17 @@
+# Bỏ qua thư mục cache của Python
+__pycache__/
+*.pyc
+
+# Bỏ qua môi trường ảo (RẤT QUAN TRỌNG)
+.venv/
+venv/
+*/.venv/
+*/venv/
+
+# Bỏ qua file biến môi trường (CỰC KỲ QUAN TRỌNG)
+.env
+*.env
+
+# Bỏ qua các file do hệ điều hành tạo ra
+.DS_Store
+Thumbs.db
