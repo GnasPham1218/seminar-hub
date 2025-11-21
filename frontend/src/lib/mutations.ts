@@ -13,3 +13,26 @@ export const LOGIN_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_REGISTRATION = `
+  mutation CreateRegistration($input: CreateRegistrationInput!) {
+    createRegistration(input: $input) {
+      id status paymentStatus
+    }
+  }
+`;
+
+export const UPDATE_REGISTRATION = `
+  mutation UpdateRegistration($id: String!, $input: UpdateRegistrationInput!) {
+    updateRegistration(id: $id, input: $input) {
+      id
+      status
+      paymentStatus
+    }
+  }
+`;
+export const DELETE_REGISTRATION = `
+  mutation DeleteRegistration($id: String!) {
+    deleteRegistration(id: $id)
+  }
+`;

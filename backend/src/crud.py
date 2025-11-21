@@ -270,13 +270,34 @@ async def delete_session(db: AsyncIOMotorDatabase, session_id: str) -> bool:
 REGISTRATION_COLLECTION = "registrations"
 
 
+# src/crud.py
+
+# ... (các import giữ nguyên)
+
+
 async def get_registrations(
-    db: AsyncIOMotorDatabase, skip: int = 0, limit: int = 10
+    db: AsyncIOMotorDatabase,
+    skip: int = 0,
+    limit: int = 10,
+    event_id: str = None,  # <--- Thêm tham số này
+    user_id: str = None,  # <--- Thêm tham số này
 ) -> tuple[List[Dict[str, Any]], int]:
-    """Lấy danh sách đăng ký (phân trang)."""
-    registrations_cursor = db[REGISTRATION_COLLECTION].find().skip(skip).limit(limit)
+
+    # 1. Tạo bộ lọc query
+    filter_query = {}
+    if event_id:
+        filter_query["event_id"] = event_id
+    if user_id:
+        filter_query["user_id"] = user_id
+
+    # 2. Truyền filter_query vào find() và count_documents()
+    registrations_cursor = (
+        db[REGISTRATION_COLLECTION].find(filter_query).skip(skip).limit(limit)
+    )
     registrations_task = registrations_cursor.to_list(length=limit)
-    count_task = db[REGISTRATION_COLLECTION].count_documents({})
+    count_task = db[REGISTRATION_COLLECTION].count_documents(
+        filter_query
+    )  # <--- Nhớ thêm filter vào đây để đếm đúng
 
     registrations, total_count = await asyncio.gather(registrations_task, count_task)
     return registrations, total_count
@@ -309,7 +330,7 @@ async def create_registration(
 
     # Các trường được set ở server theo ghi chú model
     registration_data["user_id"] = user_id
-    registration_data["status"] = "confirmed"  # Hoặc "pending_payment" tùy logic
+    registration_data["status"] = "pending"  # Hoặc "pending_payment" tùy logic
 
     now_str = get_iso_now()
     registration_data["registration_date"] = now_str
