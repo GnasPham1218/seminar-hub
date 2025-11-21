@@ -11,7 +11,7 @@ class User(BaseModel):
     id: str = Field(alias="_id")
     name: str
     email: str
-    password: str
+    password: Optional[str] = None
     role: str
     organization: str
     phone: str

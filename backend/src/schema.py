@@ -39,12 +39,20 @@ Context = Info[None, dict[str, AsyncIOMotorDatabase]]
 
 
 def _to_type(pydantic_cls: Type[Any], data: dict, type_cls: Type[Any]) -> Any:
-    """
-    Convert raw dict (coming from DB) -> pydantic model -> strawberry type instance.
-    Keeps conversion consistent and centralised.
-    """
-    # instantiate pydantic model then dump to plain dict, then feed to strawberry dataclass/type
-    return type_cls(**pydantic_cls(**data).model_dump())
+    # 1. Validate và convert dữ liệu bằng Pydantic
+    pydantic_obj = pydantic_cls(**data)
+
+    # 2. Chuyển dữ liệu thành dictionary
+    data_dict = pydantic_obj.model_dump()
+
+    # 3. --- BƯỚC QUAN TRỌNG: LỌC DỮ LIỆU ---
+    # Chỉ lấy những field nào thực sự tồn tại trong GraphQL Type (type_cls)
+    # Điều này sẽ tự động loại bỏ 'password' hoặc các field thừa khác
+    valid_fields = type_cls.__annotations__.keys()
+    clean_data = {k: v for k, v in data_dict.items() if k in valid_fields}
+
+    # 4. Trả về object GraphQL với dữ liệu đã làm sạch
+    return type_cls(**clean_data)
 
 
 async def _resolve_paginated(
@@ -379,6 +387,14 @@ class Query:
 class Mutation:
 
     # --- User Mutations ---
+    @strawberry.mutation
+    async def login(self, info: Context, email: str, password: str) -> UserType:
+        db = get_db(info)
+        user_data = await crud.login_user(db, email, password)
+        if not user_data:
+            raise ValueError("Email hoặc mật khẩu không đúng")
+        return _to_type(User, user_data, UserType)
+
     @strawberry.mutation
     async def create_user(self, info: Context, input: CreateUserInput) -> UserType:
         db = get_db(info)

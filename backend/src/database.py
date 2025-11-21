@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     mongo_db_uri: str
     mongo_db_name: str
-
+    
     class Config:
         env_file = ".env"
 
