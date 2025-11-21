@@ -23,6 +23,19 @@ import datetime
 USER_COLLECTION = "users"
 
 
+async def login_user(
+    db: AsyncIOMotorDatabase, email: str, password: str
+) -> Dict[str, Any] | None:
+    user = await db[USER_COLLECTION].find_one({"email": email})
+    if user and verify_password(password, user["password"]):
+        user = dict(user)
+        user["id"] = user["_id"]  # Strawberry dùng "id" thay vì "_id"
+        if "password" in user:
+            del user["password"]
+        return user
+    return None
+
+
 async def get_users(
     db: AsyncIOMotorDatabase, skip: int = 0, limit: int = 10
 ) -> tuple[List[Dict[str, Any]], int]:
@@ -85,7 +98,9 @@ async def update_user(
         return await get_user_by_id(db, user_id)
 
     # 3. Cập nhật DB
-    result = await db[USER_COLLECTION].update_one({"_id": user_id}, {"$set": update_data})
+    result = await db[USER_COLLECTION].update_one(
+        {"_id": user_id}, {"$set": update_data}
+    )
 
     # 4. Trả về
     if result.matched_count:
@@ -138,7 +153,6 @@ async def create_event(
     event_data = event_in.__dict__
     event_data["_id"] = new_id
     event_data["organizer_id"] = user_id
-
 
     now_str = get_iso_now()
     event_data["created_at"] = now_str
@@ -306,8 +320,7 @@ async def create_registration(
 
     # TODO: Lý tưởng, bạn nên tăng 'current_participants' của Event
     await db[EVENT_COLLECTION].update_one(
-        {"_id": registration_data["event_id"]},
-        {"$inc": {"current_participants": 1}}
+        {"_id": registration_data["event_id"]}, {"$inc": {"current_participants": 1}}
     )
 
     return registration_data
@@ -343,8 +356,7 @@ async def delete_registration(db: AsyncIOMotorDatabase, registration_id: str) ->
     reg = await get_registration_by_id(db, registration_id)
     if reg:
         await db[EVENT_COLLECTION].update_one(
-            {"_id": reg["event_id"]},
-            {"$inc": {"current_participants": -1}}
+            {"_id": reg["event_id"]}, {"$inc": {"current_participants": -1}}
         )
 
     result = await db[REGISTRATION_COLLECTION].delete_one({"_id": registration_id})
