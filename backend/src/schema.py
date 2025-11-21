@@ -309,12 +309,26 @@ class Query:
     # --- Registrations ---
     @strawberry.field
     async def registrations(
-        self, info: Context, page: int = 1, limit: int = 10
+        self,
+        info: Context,
+        page: int = 1,
+        limit: int = 10,
+        event_id: Optional[str] = None,  # <--- Thêm dòng này
+        user_id: Optional[str] = None,  # <--- Thêm dòng này
     ) -> RegistrationPage:
         db = get_db(info)
-        items, total_count, total_pages = await _resolve_paginated(
-            db, crud.get_registrations, Registration, RegistrationType, page, limit
+
+        # Tính toán phân trang (giữ nguyên logic cũ, chỉ cần gọi hàm crud mới)
+        page_num, limit_num, skip = get_pagination(page, limit)
+
+        # Gọi hàm crud đã sửa ở Bước 1
+        items_data, total_count = await crud.get_registrations(
+            db, skip=skip, limit=limit_num, event_id=event_id, user_id=user_id
         )
+
+        total_pages = math.ceil(total_count / limit_num) if limit_num > 0 else 1
+        items = [_to_type(Registration, d, RegistrationType) for d in items_data]
+
         page_info = PageInfo(
             total_count=total_count,
             total_pages=total_pages,

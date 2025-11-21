@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ClientLayout from './layouts/ClientLayout'
-import Home from './assets/client/Home'
-import EventList from './assets/client/Events'
-import EventDetail from './assets/client/EventDetail'
+import Home from './pages/client/Home'
+import EventList from './pages/client/Events'
+import EventDetail from './pages/client/EventDetail'
 import AdminLayout from './layouts/AdminLayout'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminEvents from './pages/admin/Events'
@@ -11,7 +11,7 @@ import AdminPapers from './pages/admin/Papers'
 import AdminUsers from './pages/admin/Users'
 import Login from './pages/Login'
 import "./index.css";
-import MyRegistrations from './assets/client/MyRegistrations'
+import MyRegistrations from './pages/client/MyRegistrations'
 
 function App() {
   const isAdmin = localStorage.getItem('currentUserId') === 'u003' // Admin ID
