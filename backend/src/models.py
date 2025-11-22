@@ -15,7 +15,7 @@ class User(BaseModel):
     role: str
     organization: str
     phone: str
-    registered_events: List[str]
+    registered_events: List[str] = []
     created_at: str
     updated_at: str
 
@@ -93,7 +93,7 @@ class Paper(BaseModel):
     # Bài báo có thể được nộp cho sự kiện nói chung trước khi được gán vào một phiên
     session_id: Optional[str] = None
     event_id: str
-    
+
 
 @strawberry.input
 class CreateUserInput:
