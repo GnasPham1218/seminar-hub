@@ -375,9 +375,11 @@ async def get_registration_by_id(
 async def create_registration(
     db: AsyncIOMotorDatabase,
     registration_in: CreateRegistrationInput,
-    user_id: str,  # Lấy từ context (user login)
+    user_id: str,  # Lấy từ context
 ) -> Dict[str, Any]:
-    """Tạo một đăng ký mới."""
+    """Tạo một đăng ký mới và cập nhật User + Event."""
+
+    # 1. Tạo ID cho Registration
     last_reg = await db[REGISTRATION_COLLECTION].find_one(sort=[("_id", -1)])
     if last_reg:
         last_id = last_reg["_id"]
@@ -389,20 +391,28 @@ async def create_registration(
     registration_data = registration_in.__dict__
     registration_data["_id"] = new_id
 
-    # Các trường được set ở server theo ghi chú model
+    # Các trường meta data
     registration_data["user_id"] = user_id
-    registration_data["status"] = "pending"  # Hoặc "pending_payment" tùy logic
+    registration_data["status"] = "pending"
 
     now_str = get_iso_now()
     registration_data["registration_date"] = now_str
     registration_data["created_at"] = now_str
     registration_data["updated_at"] = now_str
 
+    # 2. Insert vào Registration Collection
     await db[REGISTRATION_COLLECTION].insert_one(registration_data)
 
-    # TODO: Lý tưởng, bạn nên tăng 'current_participants' của Event
+    # 3. Cập nhật Event: Tăng số lượng người tham gia
     await db[EVENT_COLLECTION].update_one(
         {"_id": registration_data["event_id"]}, {"$inc": {"current_participants": 1}}
+    )
+
+    # --- [MỚI] 4. Cập nhật User: Thêm event_id vào danh sách registered_events ---
+    # Dùng $addToSet để đảm bảo event_id chỉ xuất hiện 1 lần trong mảng
+    await db[USER_COLLECTION].update_one(
+        {"_id": user_id},
+        {"$addToSet": {"registered_events": registration_data["event_id"]}},
     )
 
     return registration_data
@@ -432,15 +442,27 @@ async def update_registration(
 
 
 async def delete_registration(db: AsyncIOMotorDatabase, registration_id: str) -> bool:
-    """Xóa một đăng ký."""
-    # TODO: Cân nhắc: khi xóa, bạn có nên giảm
-    # 'current_participants' của Event không?
+    """Xóa một đăng ký và cập nhật lại User + Event."""
+
+    # 1. Tìm Registration trước khi xóa để lấy thông tin
     reg = await get_registration_by_id(db, registration_id)
+
     if reg:
+        event_id = reg["event_id"]
+        user_id = reg["user_id"]
+
+        # 2. Cập nhật Event: Giảm số lượng người tham gia
         await db[EVENT_COLLECTION].update_one(
-            {"_id": reg["event_id"]}, {"$inc": {"current_participants": -1}}
+            {"_id": event_id}, {"$inc": {"current_participants": -1}}
         )
 
+        # --- [MỚI] 3. Cập nhật User: Xóa event_id khỏi registered_events ---
+        # Dùng $pull để rút event_id ra khỏi mảng
+        await db[USER_COLLECTION].update_one(
+            {"_id": user_id}, {"$pull": {"registered_events": event_id}}
+        )
+
+    # 4. Xóa Registration
     result = await db[REGISTRATION_COLLECTION].delete_one({"_id": registration_id})
     return result.deleted_count > 0
 

@@ -111,9 +111,29 @@ class UserType:
     role: str
     organization: str
     phone: str
-    registered_events: List[str]
+    registered_events: List[str] = strawberry.field(default_factory=list)
     created_at: str
     updated_at: str
+
+    @strawberry.field
+    async def events(self, info: Context) -> List["EventType"]:
+        """
+        Từ danh sách ID (registered_events), query lấy full thông tin Event.
+        Dùng List["EventType"] (trong ngoặc kép) vì EventType định nghĩa bên dưới.
+        """
+        # Nếu user chưa có list này hoặc list rỗng
+        if not self.registered_events:
+            return []
+
+        db = get_db(info)
+
+        # Tìm tất cả Event có _id nằm trong danh sách registered_events
+        cursor = db["events"].find({"_id": {"$in": self.registered_events}})
+        events_data = await cursor.to_list(length=None)
+
+        # Convert sang EventType
+        # Lưu ý: Event phải được import từ models
+        return [_to_type(Event, e, EventType) for e in events_data]
 
 
 @strawberry.type
@@ -180,6 +200,15 @@ class RegistrationType:
         if event_data:
             # Chuyển đổi dict/pydantic model sang Strawberry Type
             return _to_type(Event, event_data, EventType)
+        return None
+
+    @strawberry.field
+    async def user(self, info: Context) -> Optional[UserType]:
+        """Giúp query ngược lại User từ Registration"""
+        db = get_db(info)
+        user_data = await crud.get_user_by_id(db, self.user_id)
+        if user_data:
+            return _to_type(User, user_data, UserType)
         return None
 
 
