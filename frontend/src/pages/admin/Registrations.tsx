@@ -79,22 +79,31 @@ export default function AdminRegistrations() {
     }
   }
 
-  // SỬA ĐĂNG KÝ
-  const startEdit = (reg: Registration) => {
-    setEditingId(reg.id)
-    setEditForm({
-      paymentAmount: reg.paymentAmount,
-      status: reg.status,
-      paymentStatus: reg.paymentStatus
-    })
+  // FIX 1: DÙNG ĐÚNG _id TRONG DELETE (backend dùng _id)
+  const handleDelete = async (regId: string) => {
+    if (!confirm('Xóa đăng ký này? Không thể hoàn tác!')) return
+
+    try {
+      // Gửi đúng _id (không phải id)
+      await client.request(DELETE_REGISTRATION_MUTATION, { id: regId })
+      toast.success('Xóa đăng ký thành công!')
+      setRegistrations(registrations.filter(r => r.id !== regId))
+    } catch (err: any) {
+      console.error(err)
+      toast.error('Xóa thất bại!')
+    }
   }
 
+  // FIX 2: KHÔNG GỬI paymentAmount NẾU LÀ undefined
   const saveEdit = async (regId: string) => {
     try {
       const input: any = {}
-      if (editForm.paymentAmount !== undefined) input.payment_amount = editForm.paymentAmount
       if (editForm.status) input.status = editForm.status
-      if (editForm.paymentStatus) input.payment_status = editForm.paymentStatus
+      if (editForm.paymentStatus) input.paymentStatus = editForm.paymentStatus
+      // Chỉ gửi paymentAmount nếu có giá trị hợp lệ
+      if (editForm.paymentAmount !== undefined && editForm.paymentAmount !== null && editForm.paymentAmount >= 0) {
+        input.paymentAmount = editForm.paymentAmount
+      }
 
       await client.request(UPDATE_REGISTRATION_MUTATION, { id: regId, input })
       toast.success('Cập nhật đăng ký thành công!')
@@ -106,28 +115,22 @@ export default function AdminRegistrations() {
     }
   }
 
-  const cancelEdit = () => setEditingId(null)
-
-  // XÓA ĐĂNG KÝ
-  const handleDelete = async (regId: string) => {
-    if (!confirm('Xóa đăng ký này? Không thể hoàn tác!')) return
-
-    try {
-      await client.request(DELETE_REGISTRATION_MUTATION, { id: regId })
-      toast.success('Xóa đăng ký thành công!')
-      setRegistrations(registrations.filter(r => r.id !== regId))
-    } catch (err: any) {
-      console.error(err)
-      toast.error('Xóa thất bại!')
-    }
+  const startEdit = (reg: Registration) => {
+    setEditingId(reg.id)
+    setEditForm({
+      paymentAmount: reg.paymentAmount,
+      status: reg.status,
+      paymentStatus: reg.paymentStatus
+    })
   }
 
-  // DUYỆT THANH TOÁN / XÁC NHẬN
+  const cancelEdit = () => setEditingId(null)
+
   const handleQuickAction = async (regId: string, field: 'status' | 'paymentStatus', value: string) => {
     try {
       const input: any = {}
       if (field === 'status') input.status = value
-      if (field === 'paymentStatus') input.payment_status = value
+      if (field === 'paymentStatus') input.paymentStatus = value
 
       await client.request(UPDATE_REGISTRATION_MUTATION, { id: regId, input })
       toast.success('Cập nhật thành công!')
@@ -150,7 +153,7 @@ export default function AdminRegistrations() {
       case 'paid': return { gradient: 'from-emerald-500 to-teal-600', icon: CheckCircle2, label: 'Đã thanh toán' }
       case 'pending': return { gradient: 'from-orange-500 to-yellow-600', icon: Clock, label: 'Chờ thanh toán' }
       case 'failed': return { gradient: 'from-red-500 to-rose-600', icon: XCircle, label: 'Thất bại' }
-      default: return { gradient: 'from-gray-500 to | slate-600', icon: Clock, label: 'Không rõ' }
+      default: return { gradient: 'from-gray-500 to-slate-600', icon: Clock, label: 'Không rõ' }
     }
   }
 
@@ -238,7 +241,7 @@ export default function AdminRegistrations() {
               <div className="p-8">
                 {isEditing ? (
                   <div className="space-y-4">
-                    <input type="number" value={editForm.paymentAmount || ''} onChange={e => setEditForm({ ...editForm, paymentAmount: Number(e.target.value) })} className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:outline-none" placeholder="Số tiền" />
+                    <input type="number" value={editForm.paymentAmount ?? ''} onChange={e => setEditForm({ ...editForm, paymentAmount: Number(e.target.value) || 0 })} className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:outline-none" placeholder="Số tiền" />
                     <select value={editForm.status || ''} onChange={e => setEditForm({ ...editForm, status: e.target.value as any })} className="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:outline-none">
                       <option value="pending">Chờ duyệt</option>
                       <option value="confirmed">Đã xác nhận</option>
