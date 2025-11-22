@@ -21,6 +21,7 @@ import PaymentModal from "../../components/event-details/PaymentModal";
 import CancelModal from "../../components/event-details/CancelModal";
 import SessionList from "../../components/event-details/SessionList";
 import FeedbackList from "../../components/event-details/FeedbackList";
+import FeedbackForm from "../../components/event-details/FeedbackForm";
 
 export default function EventDetail() {
   const { id } = useParams();
@@ -34,7 +35,7 @@ export default function EventDetail() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-
+  const currentUserId = localStorage.getItem("currentUserId");
   // --- FETCH DATA ---
   useEffect(() => {
     const fetchData = async () => {
@@ -152,7 +153,14 @@ export default function EventDetail() {
     );
 
   const isFull = event.currentParticipants >= event.maxParticipants;
+  // Điều kiện: Sự kiện đã kết thúc (completed) VÀ User có vé confirmed
+  const canReview =
+    event?.status === "completed" && myRegistration?.status === "confirmed";
 
+  // Hàm cập nhật danh sách khi gửi feedback thành công
+  const handleFeedbackSuccess = (newFeedback: any) => {
+    setFeedbacks((prev) => [newFeedback, ...prev]);
+  };
   return (
     <div className="container mx-auto py-12 px-4 relative">
       <div className="flex flex-col lg:flex-row gap-8">
@@ -167,6 +175,7 @@ export default function EventDetail() {
           />
 
           <EventActions
+            eventStatus={event.status} // <--- THÊM DÒNG NÀY
             myRegistration={myRegistration}
             isFull={isFull}
             isProcessing={isProcessing}
@@ -176,7 +185,17 @@ export default function EventDetail() {
             onBack={() => window.history.back()}
           />
           <div className="border-t border-gray-100 pt-8 mt-8">
-            <SessionList sessions={sessions} />
+            {/* Truyền các props mới vào SessionList */}
+            <SessionList
+              sessions={sessions}
+              feedbacks={feedbacks} // Để check xem đã review session nào chưa
+              currentUserId={currentUserId}
+              eventId={id || ""}
+              onFeedbackSuccess={handleFeedbackSuccess}
+              canReview={canReview}
+            />
+
+            {/* Bên dưới hiển thị danh sách tất cả feedback (tổng hợp) */}
             <FeedbackList feedbacks={feedbacks} />
           </div>
         </div>

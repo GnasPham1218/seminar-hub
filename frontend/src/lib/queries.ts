@@ -1,10 +1,23 @@
 export const GET_EVENTS = `
-  query Events($page: Int!, $limit: Int!) {
-    events(page: $page, limit: $limit) {
+  query Events($page: Int!, $limit: Int!, $status: String, $date: String) {
+    events(page: $page, limit: $limit, status: $status, date: $date) {
       events {
-        id title description startDate endDate location status currentParticipants maxParticipants organizerId
+        id 
+        title 
+        description 
+        startDate 
+        endDate 
+        location 
+        status 
+        currentParticipants 
+        maxParticipants 
+        organizerId
       }
-      pageInfo { totalCount totalPages currentPage }
+      pageInfo { 
+        totalCount 
+        totalPages 
+        currentPage 
+      }
     }
   }
 `;
@@ -40,6 +53,7 @@ export const GET_EVENT_FEEDBACKS = `
       feedbacks {
         id
         userId
+        sessionId
         rating
         comment
         createdAt
