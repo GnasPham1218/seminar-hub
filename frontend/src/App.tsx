@@ -13,6 +13,7 @@ import "./index.css";
 import MyRegistrations from "./pages/client/MyRegistrations";
 import BackupRestore from "./pages/admin/BackupRestore";
 import Login from "./pages/auth/Login";
+import SignUp from "./pages/auth/SignUp";
 
 function App() {
   const isAdmin = localStorage.getItem("currentUserId") === "u003"; // Admin ID
@@ -26,6 +27,8 @@ function App() {
           <Route path="events" element={<EventList />} />
           <Route path="events/:id" element={<EventDetail />} />
           <Route path="my-registrations" element={<MyRegistrations />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
         </Route>
 
         {/* Admin Routes */}
@@ -38,8 +41,6 @@ function App() {
             <Route path="backup-restore" element={<BackupRestore />} />
           </Route>
         )}
-
-        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

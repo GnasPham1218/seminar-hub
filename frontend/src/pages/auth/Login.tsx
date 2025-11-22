@@ -1,46 +1,50 @@
-import { useState } from 'react'
-import { toast } from 'sonner'
-import { LogIn, Sparkles, User, Lock } from 'lucide-react'
-import { client } from '../lib/graphql'
-import { LOGIN_MUTATION } from '../lib/mutations'
+import { useState } from "react";
+import { toast } from "sonner";
+import { LogIn, Sparkles, User, Lock, ArrowRight } from "lucide-react";
+import { client } from "../../lib/graphql";
+import { LOGIN_MUTATION } from "../../lib/mutations";
+import { Link } from "react-router-dom";
 
 export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!email.trim() || !password.trim()) {
-      toast.error('Vui lòng nhập email và mật khẩu')
-      return
+      toast.error("Vui lòng nhập email và mật khẩu");
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
       const { login: user } = await client.request(LOGIN_MUTATION, {
         email: email.trim(),
         password: password,
-      })
+      });
 
-      localStorage.setItem('currentUserId', user.id)
-      localStorage.setItem('currentUser', JSON.stringify(user))
+      localStorage.setItem("currentUserId", user.id);
+      localStorage.setItem("currentUser", JSON.stringify(user));
 
-      toast.success(`Đăng nhập thành công! Chào ${user.name} (${user.role}) 🎉`, {
-        description: 'Đang chuyển hướng...',
-      })
+      toast.success(
+        `Đăng nhập thành công! Chào ${user.name} (${user.role}) 🎉`,
+        {
+          description: "Đang chuyển hướng...",
+        }
+      );
 
-      setTimeout(() => window.location.replace('/'), 1500)
+      setTimeout(() => window.location.replace("/"), 1500);
     } catch (err: any) {
       toast.error(
-        err?.response?.errors?.[0]?.message || 
-        err?.message || 
-        'Đăng nhập thất bại – Sai email hoặc mật khẩu'
-      )
+        err?.response?.errors?.[0]?.message ||
+          err?.message ||
+          "Đăng nhập thất bại – Sai email hoặc mật khẩu"
+      );
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center px-4 relative overflow-hidden">
@@ -66,7 +70,9 @@ export default function Login() {
           {/* Form đăng nhập */}
           <div className="space-y-6 mb-8">
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">Email</label>
+              <label className="block text-gray-700 font-semibold mb-2">
+                Email
+              </label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6" />
                 <input
@@ -75,14 +81,16 @@ export default function Login() {
                   className="w-full pl-14 pr-6 py-5 text-lg border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                  onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                   autoComplete="email"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">Mật khẩu</label>
+              <label className="block text-gray-700 font-semibold mb-2">
+                Mật khẩu
+              </label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6" />
                 <input
@@ -91,7 +99,7 @@ export default function Login() {
                   className="w-full pl-14 pr-6 py-5 text-lg border-2 border-gray-200 rounded-2xl focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleLogin()}
+                  onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                   autoComplete="current-password"
                 />
               </div>
@@ -103,7 +111,9 @@ export default function Login() {
             disabled={isLoading}
             className="w-full bg-gradient-to-r from-indigo-600 to-purple-700 text-white py-5 rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {isLoading ? 'Đang đăng nhập...' : (
+            {isLoading ? (
+              "Đang đăng nhập..."
+            ) : (
               <>
                 <LogIn className="w-6 h-6" />
                 Đăng nhập
@@ -111,11 +121,20 @@ export default function Login() {
             )}
           </button>
 
-          <p className="text-center text-gray-500 text-sm mt-8">
-            Hệ thống quản lý hội thảo khoa học
-          </p>
+          {/* 👇 Footer: Link đến Sign Up */}
+          <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+            <p className="text-gray-600">
+              Chưa có tài khoản?{" "}
+              <Link 
+                to="/sign-up" 
+                className="font-bold text-indigo-600 hover:text-indigo-800 hover:underline transition inline-flex items-center gap-1"
+              >
+                Đăng ký ngay <ArrowRight className="w-4 h-4" />
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
