@@ -42,6 +42,17 @@ export const GET_EVENT_SESSIONS = `
         endTime
         room
         topics
+        papers {
+          id
+          title
+          abstract
+          fileUrl
+          keywords
+          authors {
+            id
+            name
+          }
+        }
       }
     }
   }
