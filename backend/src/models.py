@@ -91,7 +91,8 @@ class Paper(BaseModel):
 
     # Bài báo có thể được nộp cho sự kiện nói chung trước khi được gán vào một phiên
     session_id: Optional[str] = None
-
+    event_id: str
+    
 
 @strawberry.input
 class CreateUserInput:
@@ -239,7 +240,9 @@ class CreatePaperInput:
     keywords: List[str]
     file_url: str
     status: str
-    session_id: str
+    # CÓ THỂ NULL (Vì lúc nộp chưa chắc đã được xếp lịch)
+    session_id: Optional[str] = None
+    event_id: str
     # id, status ('submitted'), submission_date, created_at, updated_at
     # sẽ được set ở server
     # session_id sẽ được gán sau bởi admin

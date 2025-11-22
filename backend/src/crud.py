@@ -253,6 +253,29 @@ async def get_session_by_id(
     return session
 
 
+async def get_papers_by_session(
+    db: AsyncIOMotorDatabase,
+    session_id: str,
+    status: str | None = "approved",  # Mặc định chỉ lấy bài đã duyệt
+) -> List[Dict[str, Any]]:
+    """
+    Lấy danh sách bài báo thuộc về một phiên cụ thể.
+    Mặc định filter status='approved' để hiển thị ra public.
+    Truyền status=None nếu muốn lấy tất cả (cho Admin).
+    """
+    query = {"session_id": session_id}
+
+    if status:
+        query["status"] = status
+
+    # PAPER_COLLECTION là tên constant collection của bạn (vd: "papers")
+    cursor = db[PAPER_COLLECTION].find(query)
+
+    # Lấy tất cả bài báo trong session đó (thường số lượng không quá lớn nên không cần phân trang)
+    papers = await cursor.to_list(length=None)
+    return papers
+
+
 async def create_session(
     db: AsyncIOMotorDatabase, session_in: CreateSessionInput
 ) -> Dict[str, Any]:

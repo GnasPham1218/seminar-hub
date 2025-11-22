@@ -20,7 +20,7 @@ export default function Home() {
   return (
     <>
       {/* Hero Section - Siêu đỉnh cao */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-indigo-600 via-purple-600 to-pink-600">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-20 left-20 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse"></div>
@@ -41,7 +41,7 @@ export default function Home() {
             <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight animate-in fade-in zoom-in duration-700 delay-100">
               Nơi Hội Tụ Các Nhà
               <br />
-              <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
                 Nghiên Cứu Hàng Đầu
               </span>
             </h1>
@@ -94,7 +94,7 @@ export default function Home() {
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent inline-block">
+            <h2 className="text-4xl md:text-5xl font-extrabold bg-linear-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent inline-block">
               Chúng tôi tự hào về những con số này
             </h2>
             <p className="mt-4 text-xl text-gray-600">
@@ -127,7 +127,7 @@ export default function Home() {
               return (
                 <div
                   key={index}
-                  className={`group relative bg-gradient-to-br ${stat.gradient} p-10 rounded-3xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-6 transition-all duration-500 overflow-hidden`}
+                  className={`group relative bg-linear-to-br ${stat.gradient} p-10 rounded-3xl shadow-2xl hover:shadow-3xl transform hover:-translate-y-6 transition-all duration-500 overflow-hidden`}
                 >
                   {/* Overlay sáng khi hover */}
                   <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition"></div>
@@ -152,7 +152,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-24 bg-linear-to-b from-gray-50 to-white">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900">
@@ -182,7 +182,7 @@ export default function Home() {
                 key={i}
                 className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                <div className="w-16 h-16 bg-linear-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
                   <feature.icon className="w-9 h-9 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
@@ -199,7 +199,7 @@ export default function Home() {
       </section>
 
       {/* CTA Final */}
-      <section className="py-24 bg-gradient-to-r from-indigo-600 to-purple-700">
+      <section className="py-24 bg-linear-to-r from-indigo-600 to-purple-700">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6">
             Sẵn sàng tham gia hành trình khoa học 2025?

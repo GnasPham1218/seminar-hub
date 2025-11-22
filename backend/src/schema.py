@@ -147,6 +147,13 @@ class SessionType:
     created_at: str
     updated_at: str
 
+    @strawberry.field
+    async def papers(self, info: Context) -> List["PaperType"]:
+        """Lấy danh sách bài báo/tham luận trong phiên này"""
+        db = get_db(info)
+        papers_data = await crud.get_papers_by_session(db, session_id=self.id)
+        return [_to_type(Paper, p, PaperType) for p in papers_data]
+
 
 @strawberry.type
 class RegistrationType:
@@ -211,6 +218,30 @@ class PaperType:
     created_at: str
     updated_at: str
     session_id: Optional[str]
+    event_id: str
+
+    @strawberry.field
+    async def event(self, info: Context) -> Optional[EventType]:
+        """Lấy thông tin chi tiết sự kiện chứa bài báo này"""
+        db = get_db(info)
+        event_data = await crud.get_event_by_id(db, self.event_id)
+        if event_data:
+            return _to_type(Event, event_data, EventType)
+        return None
+
+    @strawberry.field
+    async def authors(self, info: Context) -> List[UserType]:
+        """Chuyển đổi author_ids thành danh sách User đầy đủ"""
+        if not self.author_ids:
+            return []
+
+        db = get_db(info)
+        # Tìm tất cả user có _id nằm trong danh sách author_ids
+        # Bạn cần dùng t oán tử $in của MongoDB
+        cursor = db["users"].find({"_id": {"$in": self.author_ids}})
+        users_data = await cursor.to_list(length=None)
+
+        return [_to_type(User, u, UserType) for u in users_data]
 
 
 # -----------------------
@@ -644,6 +675,33 @@ class Mutation:
     @strawberry.mutation
     async def create_paper(self, info: Context, input: CreatePaperInput) -> PaperType:
         db = get_db(info)
+
+        user_id = info.context.get("user_id")
+
+        if not user_id:
+            raise ValueError("Bạn cần đăng nhập (thiếu header x-user-id).")
+
+        # QUERY DATABASE ĐỂ LẤY THÔNG TIN USER
+        user_data = await db["users"].find_one({"_id": user_id})
+
+        if not user_data:
+            raise ValueError("User không tồn tại trong hệ thống.")
+
+        # Lấy Role từ dữ liệu vừa query được
+        user_role = user_data.get("role")  # "admin" hoặc "researcher"
+
+        # Kiểm tra quyền
+        allowed_roles = ["admin", "researcher"]
+        if user_role not in allowed_roles:
+            raise ValueError(
+                f"Role '{user_role}' không có quyền nộp bài. Chỉ Researcher/Admin mới được phép."
+            )
+
+        # Logic tạo bài báo (giữ nguyên)
+        # Nếu là Researcher, ép buộc author là chính họ
+        if user_role == "researcher":
+            input.author_ids = [user_id]
+
         data = await crud.create_paper(db, input)
         return _to_type(Paper, data, PaperType)
 

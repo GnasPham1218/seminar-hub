@@ -140,7 +140,7 @@ export default function EventList() {
                   </h2>
 
                   <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                    <Calendar size={16} className="flex-shrink-0" />
+                    <Calendar size={16} className="shrink-0" />
                     <span>
                       {format(new Date(event.startDate), "dd/MM/yyyy")} →{" "}
                       {format(new Date(event.endDate), "dd/MM/yyyy")}
@@ -148,7 +148,7 @@ export default function EventList() {
                   </div>
 
                   <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-                    <MapPin size={16} className="flex-shrink-0" />
+                    <MapPin size={16} className="shrink-0" />
                     <span className="line-clamp-1">{event.location}</span>
                   </div>
 

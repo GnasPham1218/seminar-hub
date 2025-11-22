@@ -51,3 +51,14 @@ export const CREATE_FEEDBACK = `
     }
   }
 `;
+export const CREATE_PAPER = `
+  mutation CreatePaper($input: CreatePaperInput!) {
+    createPaper(input: $input) {
+      id
+      title
+      status
+      fileUrl
+      createdAt
+    }
+  }
+`;
