@@ -36,3 +36,18 @@ export const DELETE_REGISTRATION = `
     deleteRegistration(id: $id)
   }
 `;
+export const CREATE_FEEDBACK = `
+  mutation CreateFeedback($input: CreateFeedbackInput!) {
+    createFeedback(input: $input) {
+      id
+      rating
+      comment
+      sessionId 
+      createdAt
+      user {
+        id
+        name
+      }
+    }
+  }
+`;

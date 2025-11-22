@@ -1,12 +1,8 @@
-import {
-  ArrowLeft,
-  CheckCircle,
-  AlertCircle,
-  Trash2,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle, AlertCircle, Trash2 } from "lucide-react";
 
 interface EventActionsProps {
   myRegistration: any;
+  eventStatus?: string;
   isFull: boolean;
   isProcessing: boolean;
   onRegister: () => void;
@@ -16,6 +12,7 @@ interface EventActionsProps {
 }
 
 export default function EventActions({
+  eventStatus,
   myRegistration,
   isFull,
   isProcessing,
@@ -59,19 +56,21 @@ export default function EventActions({
             Thanh toán ngay
           </button>
 
-          <button
-            onClick={onOpenCancel}
-            disabled={isProcessing}
-            className="px-4 py-3 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 transition flex items-center justify-center"
-            title="Hủy đăng ký"
-          >
-            <Trash2 size={20} />
-          </button>
+          {/* Check này bạn ĐÃ LÀM ĐÚNG ở case chưa thanh toán */}
+          {eventStatus !== "completed" && (
+            <button
+              onClick={onOpenCancel}
+              disabled={isProcessing}
+              className="px-6 py-3 bg-red-100 text-red-600 rounded-xl font-bold hover:bg-red-200 transition-all"
+            >
+              Hủy vé
+            </button>
+          )}
         </>
       );
     }
 
-    // 3. Đã thanh toán
+    // 3. Đã thanh toán (BẠN ĐANG THIẾU CHECK Ở ĐÂY)
     return (
       <>
         <button
@@ -82,14 +81,17 @@ export default function EventActions({
           Đã thanh toán
         </button>
 
-        <button
-          onClick={onOpenCancel}
-          disabled={isProcessing}
-          className="px-6 py-3 bg-white border border-red-300 text-red-600 rounded-lg font-semibold hover:bg-red-50 hover:border-red-400 transition flex items-center justify-center gap-2"
-        >
-          <Trash2 size={18} />
-          Hủy vé
-        </button>
+        {/* 👇👇👇 SỬA Ở ĐÂY: Thêm điều kiện kiểm tra eventStatus */}
+        {eventStatus !== "completed" && (
+          <button
+            onClick={onOpenCancel}
+            disabled={isProcessing}
+            className="px-6 py-3 bg-white border border-red-300 text-red-600 rounded-lg font-semibold hover:bg-red-50 hover:border-red-400 transition flex items-center justify-center gap-2"
+          >
+            <Trash2 size={18} />
+            Hủy vé
+          </button>
+        )}
       </>
     );
   };

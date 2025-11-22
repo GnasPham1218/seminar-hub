@@ -120,6 +120,7 @@ class UserType:
 class EventType:
     id: str
     title: str
+    fee: int
     description: str
     start_date: str
     end_date: str
@@ -159,6 +160,21 @@ class RegistrationType:
     created_at: str
     updated_at: str
 
+    @strawberry.field
+    async def event(self, info: Context) -> Optional[EventType]:
+        """
+        Hàm này lấy thông tin chi tiết Event dựa trên event_id
+        đang có trong Registration.
+        """
+        db = get_db(info)
+        # Gọi hàm crud để tìm event theo ID
+        event_data = await crud.get_event_by_id(db, self.event_id)
+
+        if event_data:
+            # Chuyển đổi dict/pydantic model sang Strawberry Type
+            return _to_type(Event, event_data, EventType)
+        return None
+
 
 @strawberry.type
 class FeedbackType:
@@ -169,6 +185,17 @@ class FeedbackType:
     created_at: str
     session_id: Optional[str]
     comment: Optional[str]
+
+    @strawberry.field
+    async def user(self, info: Context) -> Optional[UserType]:
+        """Lấy thông tin chi tiết người dùng đã viết feedback"""
+        db = get_db(info)
+        # Gọi hàm crud lấy user theo ID (đã có sẵn trong crud.py)
+        user_data = await crud.get_user_by_id(db, self.user_id)
+
+        if user_data:
+            return _to_type(User, user_data, UserType)
+        return None
 
 
 @strawberry.type
@@ -264,11 +291,26 @@ class Query:
 
     # --- Events ---
     @strawberry.field
-    async def events(self, info: Context, page: int = 1, limit: int = 10) -> EventPage:
+    async def events(
+        self,
+        info: Context,
+        page: int = 1,
+        limit: int = 10,
+        status: Optional[str] = None,
+        date: Optional[str] = None,
+    ) -> EventPage:
         db = get_db(info)
-        items, total_count, total_pages = await _resolve_paginated(
-            db, crud.get_events, Event, EventType, page, limit
+        # 2. Tự tính toán phân trang (dùng hàm utils có sẵn)
+        page_num, limit_num, skip = get_pagination(page, limit)
+
+        # 3. Gọi hàm CRUD (cần sửa hàm này ở bước sau để nhận filter)
+        items_data, total_count = await crud.get_events(
+            db, skip=skip, limit=limit_num, status=status, date=date
         )
+
+        # 4. Tính toán PageInfo
+        total_pages = math.ceil(total_count / limit_num) if limit_num > 0 else 1
+        items = [_to_type(Event, d, EventType) for d in items_data]
         page_info = PageInfo(
             total_count=total_count,
             total_pages=total_pages,
@@ -286,12 +328,25 @@ class Query:
     # --- Sessions ---
     @strawberry.field
     async def sessions(
-        self, info: Context, page: int = 1, limit: int = 10
+        self,
+        info: Context,
+        page: int = 1,
+        limit: int = 10,
+        event_id: Optional[str] = None,
     ) -> SessionPage:
         db = get_db(info)
-        items, total_count, total_pages = await _resolve_paginated(
-            db, crud.get_sessions, Session, SessionType, page, limit
+        page_num, limit_num, skip = get_pagination(page, limit)
+
+        # 2. Gọi hàm CRUD (Lưu ý: bạn cần cập nhật crud.get_sessions bên file crud.py để nhận event_id)
+        # Thay vì dùng _resolve_paginated, ta gọi trực tiếp để truyền thêm tham số
+        items_data, total_count = await crud.get_sessions(
+            db, skip=skip, limit=limit_num, event_id=event_id
         )
+
+        # 3. Tính toán page info
+        total_pages = math.ceil(total_count / limit_num) if limit_num > 0 else 1
+        items = [_to_type(Session, d, SessionType) for d in items_data]
+
         page_info = PageInfo(
             total_count=total_count,
             total_pages=total_pages,
@@ -350,12 +405,24 @@ class Query:
     # --- Feedbacks ---
     @strawberry.field
     async def feedbacks(
-        self, info: Context, page: int = 1, limit: int = 10
+        self,
+        info: Context,
+        page: int = 1,
+        limit: int = 10,
+        event_id: Optional[str] = None,  # <--- THÊM THAM SỐ NÀY
     ) -> FeedbackPage:
         db = get_db(info)
-        items, total_count, total_pages = await _resolve_paginated(
-            db, crud.get_feedbacks, Feedback, FeedbackType, page, limit
+
+        page_num, limit_num, skip = get_pagination(page, limit)
+
+        # Gọi hàm CRUD (Cần cập nhật crud.get_feedbacks bên file crud.py)
+        items_data, total_count = await crud.get_feedbacks(
+            db, skip=skip, limit=limit_num, event_id=event_id
         )
+
+        total_pages = math.ceil(total_count / limit_num) if limit_num > 0 else 1
+        items = [_to_type(Feedback, d, FeedbackType) for d in items_data]
+
         page_info = PageInfo(
             total_count=total_count,
             total_pages=total_pages,
@@ -506,15 +573,56 @@ class Mutation:
         return await crud.delete_registration(get_db(info), id)
 
     # --- Feedback Mutations ---
+    # src/schema.py
+
     @strawberry.mutation
     async def create_feedback(
         self, info: Context, input: CreateFeedbackInput
     ) -> FeedbackType:
         db = get_db(info)
         user_id = info.context.get("user_id")
-        if not user_id:
-            user_id = "u000"
 
+        # Giả lập user_id nếu chưa có auth (như code cũ của bạn)
+        if not user_id:
+            user_id = "u001"  # Đổi thành ID test của bạn nếu cần
+
+        if not input.session_id:
+            raise ValueError("Bạn phải chọn phiên (session) để đánh giá.")
+
+        # 2. Kiểm tra xem User đã đánh giá Session này chưa (Tránh spam)
+        existing_feedback = await db["feedbacks"].find_one(
+            {"user_id": user_id, "session_id": input.session_id}
+        )
+
+        if existing_feedback:
+            raise ValueError("Bạn đã đánh giá phiên này rồi, không thể gửi thêm.")
+
+        # 1. Kiểm tra trạng thái sự kiện
+        event_data = await crud.get_event_by_id(db, input.event_id)
+        if not event_data:
+            raise ValueError("Sự kiện không tồn tại.")
+
+        if event_data.get("status") != "completed":
+            raise ValueError("Sự kiện chưa kết thúc, bạn chưa thể gửi đánh giá.")
+
+        # 2. Kiểm tra user đã đăng ký và trạng thái là 'confirmed'
+        # Gọi hàm get_registrations với bộ lọc user_id và event_id
+        regs, _ = await crud.get_registrations(
+            db, user_id=user_id, event_id=input.event_id
+        )
+
+        is_confirmed = False
+        for reg in regs:
+            if reg.get("status") == "confirmed":
+                is_confirmed = True
+                break
+
+        if not is_confirmed:
+            raise ValueError(
+                "Bạn chưa tham gia hoặc vé chưa được xác nhận tham dự sự kiện này."
+            )
+
+        # 3. Tạo feedback
         data = await crud.create_feedback(db, input, user_id=user_id)
         return _to_type(Feedback, data, FeedbackType)
 
