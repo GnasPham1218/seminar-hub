@@ -119,12 +119,37 @@ EVENT_COLLECTION = "events"
 
 
 async def get_events(
-    db: AsyncIOMotorDatabase, skip: int = 0, limit: int = 10
+    db: AsyncIOMotorDatabase,
+    skip: int = 0,
+    limit: int = 10,
+    status: str | None = None,
+    date: str | None = None,
 ) -> tuple[List[Dict[str, Any]], int]:
-    """Lấy danh sách các sự kiện (phân trang)."""
-    events_cursor = db[EVENT_COLLECTION].find().skip(skip).limit(limit)
+    """Lấy danh sách các sự kiện (phân trang) có hỗ trợ lọc theo status và date."""
+
+    # 1. Xây dựng bộ lọc (Query Builder)
+    query = {}
+
+    # Nếu có status, thêm vào điều kiện tìm kiếm
+    if status:
+        query["status"] = status
+
+    # Nếu có date, tìm các start_date bắt đầu bằng chuỗi ngày đó
+    # Ví dụ: date="2025-12-01" sẽ tìm thấy "2025-12-01T09:00:00"
+    if date:
+        query["start_date"] = {"$regex": f"^{date}"}
+
+    # 2. Thực hiện truy vấn
+    # Lưu ý: Truyền `query` vào find()
+    # Thêm .sort("created_at", -1) để sắp xếp mới nhất lên đầu
+    events_cursor = (
+        db[EVENT_COLLECTION].find(query).sort("created_at", -1).skip(skip).limit(limit)
+    )
+
     events_task = events_cursor.to_list(length=limit)
-    count_task = db[EVENT_COLLECTION].count_documents({})
+
+    # 3. Đếm tổng số record khớp với bộ lọc (QUAN TRỌNG: Phải truyền query vào đây)
+    count_task = db[EVENT_COLLECTION].count_documents(query)
 
     events, total_count = await asyncio.gather(events_task, count_task)
     return events, total_count
@@ -196,12 +221,25 @@ SESSION_COLLECTION = "sessions"
 
 
 async def get_sessions(
-    db: AsyncIOMotorDatabase, skip: int = 0, limit: int = 10
+    db: AsyncIOMotorDatabase,
+    skip: int = 0,
+    limit: int = 10,
+    event_id: str | None = None,  # <--- 1. Thêm tham số này (Optional[str])
 ) -> tuple[List[Dict[str, Any]], int]:
-    """Lấy danh sách các phiên (phân trang)."""
-    sessions_cursor = db[SESSION_COLLECTION].find().skip(skip).limit(limit)
+    """Lấy danh sách các phiên (phân trang), có thể lọc theo event_id."""
+
+    # 2. Tạo bộ lọc (filter query)
+    filter_query = {}
+    if event_id:
+        filter_query["event_id"] = event_id
+
+    # 3. Truyền bộ lọc vào find()
+    sessions_cursor = db[SESSION_COLLECTION].find(filter_query).skip(skip).limit(limit)
     sessions_task = sessions_cursor.to_list(length=limit)
-    count_task = db[SESSION_COLLECTION].count_documents({})
+
+    # 4. QUAN TRỌNG: Truyền bộ lọc vào count_documents()
+    # để đếm đúng số lượng record sau khi lọc
+    count_task = db[SESSION_COLLECTION].count_documents(filter_query)
 
     sessions, total_count = await asyncio.gather(sessions_task, count_task)
     return sessions, total_count
@@ -390,12 +428,23 @@ FEEDBACK_COLLECTION = "feedbacks"
 
 
 async def get_feedbacks(
-    db: AsyncIOMotorDatabase, skip: int = 0, limit: int = 10
+    db: AsyncIOMotorDatabase,
+    skip: int = 0,
+    limit: int = 10,
+    event_id: str | None = None,
 ) -> tuple[List[Dict[str, Any]], int]:
-    """Lấy danh sách feedback (phân trang)."""
-    feedbacks_cursor = db[FEEDBACK_COLLECTION].find().skip(skip).limit(limit)
+    """Lấy danh sách feedback (phân trang), có thể lọc theo event_id."""
+
+    filter_query = {}
+    if event_id:
+        filter_query["event_id"] = event_id
+
+    feedbacks_cursor = (
+        db[FEEDBACK_COLLECTION].find(filter_query).skip(skip).limit(limit)
+    )
     feedbacks_task = feedbacks_cursor.to_list(length=limit)
-    count_task = db[FEEDBACK_COLLECTION].count_documents({})
+
+    count_task = db[FEEDBACK_COLLECTION].count_documents(filter_query)
 
     feedbacks, total_count = await asyncio.gather(feedbacks_task, count_task)
     return feedbacks, total_count

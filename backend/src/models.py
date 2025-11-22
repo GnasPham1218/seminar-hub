@@ -23,6 +23,7 @@ class User(BaseModel):
 class Event(BaseModel):
     id: str = Field(alias="_id")
     title: str
+    fee: int
     description: str
     start_date: str
     end_date: str
@@ -115,6 +116,7 @@ class UpdateUserInput:
 @strawberry.input
 class CreateEventInput:
     title: str
+    fee: int
     description: str
     start_date: str
     end_date: str
@@ -129,6 +131,7 @@ class CreateEventInput:
 class UpdateEventInput:
     """Input để cập nhật thông tin một Event đã có."""
 
+    fee: Optional[int] = strawberry.UNSET
     title: Optional[str] = strawberry.UNSET
     description: Optional[str] = strawberry.UNSET
     start_date: Optional[str] = strawberry.UNSET
