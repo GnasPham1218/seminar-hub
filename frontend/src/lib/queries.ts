@@ -13,7 +13,7 @@ export const GET_EVENTS = `
 export const GET_EVENT = `
   query Event($id: String!) {
     event(id: $id) {
-      id title description startDate endDate location status maxParticipants currentParticipants
+      id title fee description startDate endDate location status maxParticipants currentParticipants
     }
   }
 `;
@@ -28,17 +28,31 @@ export const CHECK_REGISTRATION = `
     }
   }
 `;
-
-
 export const GET_MY_REGISTRATIONS = `
-  query Registrations($page: Int!, $limit: Int!) {
-    registrations(page: $page, limit: $limit) {
+  query GetMyRegistrations($userId: String, $page: Int, $limit: Int) {
+    registrations(userId: $userId, page: $page, limit: $limit) {
       registrations {
-        id eventId registrationDate status paymentStatus paymentAmount
+        id
+        eventId
+        registrationDate
+        status
+        paymentStatus
+        paymentAmount
+        event {
+          title
+          startDate
+          endDate
+          location
+        }
+      }
+      pageInfo {
+        totalCount
+        totalPages
       }
     }
   }
 `;
+
 // Thêm vào cuối file queries.ts
 export const GET_USERS = `
   query { users(page: 1, limit: 100) { users { id name email role organization phone } } }

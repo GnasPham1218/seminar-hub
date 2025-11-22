@@ -9,9 +9,14 @@ import {
   Globe,
   Award,
   ChevronRight,
+  LayoutDashboard, // Thêm icon Dashboard
+  UserPlus,        // Thêm icon UserPlus
 } from "lucide-react";
 
 export default function Home() {
+  // Kiểm tra trạng thái đăng nhập từ localStorage
+  const isLoggedIn = !!localStorage.getItem("currentUserId");
+
   return (
     <>
       {/* Hero Section - Siêu đỉnh cao */}
@@ -26,14 +31,14 @@ export default function Home() {
         <div className="relative container mx-auto px-6 text-center z-10">
           <div className="max-w-5xl mx-auto">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full border border-white/30 mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
               <Sparkles className="w-5 h-5 text-yellow-300" />
               <span className="text-white font-medium">
                 Hội thảo Khoa học Quốc gia 2025
               </span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight">
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white leading-tight animate-in fade-in zoom-in duration-700 delay-100">
               Nơi Hội Tụ Các Nhà
               <br />
               <span className="bg-gradient-to-r from-yellow-300 to-pink-300 bg-clip-text text-transparent">
@@ -41,12 +46,13 @@ export default function Home() {
               </span>
             </h1>
 
-            <p className="mt-8 text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
+            <p className="mt-8 text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
               Kết nối tri thức • Chia sẻ tầm nhìn • Định hình tương lai khoa học
               Việt Nam
             </p>
 
-            <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center">
+            <div className="mt-12 flex flex-col sm:flex-row gap-6 justify-center animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
+              {/* Nút Khám phá sự kiện */}
               <Link
                 to="/events"
                 className="group inline-flex items-center justify-center px-10 py-5 bg-white text-indigo-600 font-bold text-lg rounded-full shadow-2xl hover:shadow-pink-500/50 transform hover:scale-105 transition-all duration-300"
@@ -55,11 +61,22 @@ export default function Home() {
                 <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </Link>
 
+              {/* Nút Logic Đăng nhập / Dashboard */}
               <Link
-                to="/login"
-                className="inline-flex items-center justify-center px-10 py-5 border-4 border-white/50 text-white font-bold text-lg rounded-full backdrop-blur-md hover:bg-white/20 transition-all duration-300"
+                to={isLoggedIn ? "/my-registrations" : "/login"}
+                className="group inline-flex items-center justify-center px-10 py-5 border-4 border-white/50 text-white font-bold text-lg rounded-full backdrop-blur-md hover:bg-white/20 transition-all duration-300"
               >
-                Tham gia cùng chúng tôi
+                {isLoggedIn ? (
+                  <>
+                    Vé của tôi
+                    <LayoutDashboard className="ml-3 w-6 h-6 group-hover:rotate-12 transition-transform" />
+                  </>
+                ) : (
+                  <>
+                    Tham gia cùng chúng tôi
+                    <UserPlus className="ml-3 w-6 h-6 group-hover:rotate-12 transition-transform" />
+                  </>
+                )}
               </Link>
             </div>
           </div>
@@ -73,8 +90,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section - Nâng cấp siêu đẹp */}
-      {/* Stats Section – Đã fix 100% đẹp */}
+      {/* Stats Section */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
@@ -173,7 +189,7 @@ export default function Home() {
                   {feature.title}
                 </h3>
                 <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
-                <div className="mt-6 flex items-center text-indigo-600 font-medium">
+                <div className="mt-6 flex items-center text-indigo-600 font-medium cursor-pointer hover:underline">
                   Tìm hiểu thêm <ChevronRight className="w-5 h-5 ml-1" />
                 </div>
               </div>

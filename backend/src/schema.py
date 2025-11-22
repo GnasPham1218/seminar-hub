@@ -120,6 +120,7 @@ class UserType:
 class EventType:
     id: str
     title: str
+    fee: int
     description: str
     start_date: str
     end_date: str
@@ -158,6 +159,21 @@ class RegistrationType:
     payment_amount: int
     created_at: str
     updated_at: str
+
+    @strawberry.field
+    async def event(self, info: Context) -> Optional[EventType]:
+        """
+        Hàm này lấy thông tin chi tiết Event dựa trên event_id
+        đang có trong Registration.
+        """
+        db = get_db(info)
+        # Gọi hàm crud để tìm event theo ID
+        event_data = await crud.get_event_by_id(db, self.event_id)
+
+        if event_data:
+            # Chuyển đổi dict/pydantic model sang Strawberry Type
+            return _to_type(Event, event_data, EventType)
+        return None
 
 
 @strawberry.type

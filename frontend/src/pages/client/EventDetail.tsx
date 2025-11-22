@@ -15,7 +15,6 @@ import EventSidebar from "../../components/event-details/EventSidebar";
 import PaymentModal from "../../components/event-details/PaymentModal";
 import CancelModal from "../../components/event-details/CancelModal";
 
-
 export default function EventDetail() {
   const { id } = useParams();
   const [event, setEvent] = useState<any>(null);
@@ -66,7 +65,7 @@ export default function EventDetail() {
       const data = await client.request(CREATE_REGISTRATION, {
         input: {
           eventId: id,
-          paymentAmount: 1500000,
+          paymentAmount: event.fee,
           paymentStatus: "unpaid",
         },
       });
@@ -140,11 +139,11 @@ export default function EventDetail() {
         {/* Cột trái: Chi tiết sự kiện */}
         <div className="flex-1 bg-white rounded-2xl shadow-lg p-8 flex flex-col">
           <EventInfo event={event} />
-          
+
           <EventStats
             currentParticipants={event.currentParticipants}
             maxParticipants={event.maxParticipants}
-            price={1500000}
+            price={event.fee}
           />
 
           <EventActions
