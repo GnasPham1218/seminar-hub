@@ -125,19 +125,7 @@ export default function AdminDashboard() {
           </h1>
           <p className="text-xl text-gray-600 mt-2">Hôm nay là {format(new Date(), 'EEEE, dd \'tháng\' MM, yyyy')}</p>
         </div>
-        <div className="flex items-center gap-4">
-          <button className="btn btn-ghost btn-circle relative">
-            <Bell className="w-6 h-6" />
-            <span className="absolute -top-1 -right-1 badge badge-error badge-xs">3</span>
-          </button>
-          <div className="avatar">
-            <div className="w-14 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-              <div className="bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl">
-                A
-              </div>
-            </div>
-          </div>
-        </div>
+       
       </div>
 
       {/* Stats Grid */}

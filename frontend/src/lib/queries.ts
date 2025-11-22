@@ -12,6 +12,7 @@ export const GET_EVENTS = `
         currentParticipants 
         maxParticipants 
         organizerId
+        fee
       }
       pageInfo { 
         totalCount 
@@ -113,5 +114,47 @@ export const GET_MY_REGISTRATIONS = `
 `;
 
 export const GET_USERS = `
-  query { users(page: 1, limit: 100) { users { id name email role organization phone } } }
+  query GetUsers($page: Int!, $limit: Int!) {
+    users(page: $page, limit: $limit) {
+      users {
+        id
+        name
+        email
+        role
+        organization
+        phone
+        registeredEvents
+        createdAt
+        updatedAt
+      }
+      pageInfo {
+        totalCount
+      }
+    }
+  }
+`;
+
+export const GET_PAPERS = `
+  query GetPapers($page: Int!, $limit: Int!) {
+    papers(page: $page, limit: $limit) {
+      papers {
+        id
+        title
+        authorIds
+        abstract
+        keywords
+        fileUrl
+        status
+        sessionId
+        submissionDate
+        eventId 
+        event {
+            title
+        }
+      }
+      pageInfo {
+        totalCount
+      }
+    }
+  }
 `;

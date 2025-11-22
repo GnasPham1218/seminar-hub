@@ -1,0 +1,295 @@
+{
+  "sessions": [
+    {
+      "_id": "s001",
+      "event_id": "e001",
+      "title": "\u1ee8ng d\u1ee5ng AI trong Y t\u1ebf",
+      "description": "Kh\u00e1m ph\u00e1 c\u00e1c \u1ee9ng d\u1ee5ng ti\u00ean ti\u1ebfn c\u1ee7a AI trong ch\u1ea9n \u0111o\u00e1n v\u00e0 \u0111i\u1ec1u tr\u1ecb y khoa",
+      "speaker_id": "u002",
+      "start_time": "2025-12-01T09:00:00Z",
+      "end_time": "2025-12-01T10:30:00Z",
+      "room": "Ph\u00f2ng A1",
+      "topics": [
+        "AI",
+        "Healthcare"
+      ],
+      "created_at": "2025-10-01T10:00:00Z",
+      "updated_at": "2025-11-10T15:00:00Z"
+    },
+    {
+      "_id": "s002",
+      "event_id": "e001",
+      "title": "Machine Learning v\u00e0 D\u1eef li\u1ec7u l\u1edbn",
+      "description": "C\u00e1c k\u1ef9 thu\u1eadt v\u00e0 c\u00f4ng c\u1ee5 x\u1eed l\u00fd Big Data v\u1edbi Machine Learning",
+      "speaker_id": "u002",
+      "start_time": "2025-12-02T13:30:00Z",
+      "end_time": "2025-12-02T15:00:00Z",
+      "room": "Ph\u00f2ng B3",
+      "topics": [
+        "Machine Learning",
+        "Big Data"
+      ],
+      "created_at": "2025-10-01T11:00:00Z",
+      "updated_at": "2025-11-11T09:30:00Z"
+    },
+    {
+      "_id": "s003",
+      "event_id": "e002",
+      "title": "Ph\u00e2n t\u00edch d\u1eef li\u1ec7u n\u00e2ng cao v\u1edbi Python",
+      "description": "Workshop th\u1ef1c h\u00e0nh v\u1ec1 pandas, numpy v\u00e0 visualization",
+      "speaker_id": "u002",
+      "start_time": "2025-11-20T10:00:00Z",
+      "end_time": "2025-11-20T12:00:00Z",
+      "room": "H\u1ed9i tr\u01b0\u1eddng 2",
+      "topics": [
+        "Python",
+        "Data Science"
+      ],
+      "created_at": "2025-09-15T09:00:00Z",
+      "updated_at": "2025-11-20T12:30:00Z"
+    }
+  ],
+  "users": [
+    {
+      "_id": "u001",
+      "name": "Nguy\u1ec5n V\u0103n An",
+      "email": "an.nguyen@hust.edu.vn",
+      "password": "$2b$12$XIgsMK1urIufXMYA1wPph.1i2mHZKiyV8wXtDq1Zi3nsVEZCEVqdW",
+      "role": "researcher",
+      "organization": "\u0110\u1ea1i h\u1ecdc B\u00e1ch Khoa H\u00e0 N\u1ed9i",
+      "phone": "0987654321",
+      "registered_events": [
+        "e001",
+        "e002"
+      ],
+      "created_at": "2025-01-15T10:30:00Z",
+      "updated_at": "2025-11-10T14:20:00Z"
+    },
+    {
+      "_id": "u002",
+      "name": "Tr\u1ea7n Th\u1ecb B\u00ecnh",
+      "email": "binh.tran@hcmus.edu.vn",
+      "password": "$2b$12$XIgsMK1urIufXMYA1wPph.1i2mHZKiyV8wXtDq1Zi3nsVEZCEVqdW",
+      "role": "speaker",
+      "organization": "\u0110\u1ea1i h\u1ecdc Khoa h\u1ecdc T\u1ef1 nhi\u00ean TP.HCM",
+      "phone": "0912345678",
+      "registered_events": [
+        "e002"
+      ],
+      "created_at": "2025-02-20T09:00:00Z",
+      "updated_at": "2025-11-11T16:45:00Z"
+    },
+    {
+      "_id": "u003",
+      "name": "L\u00ea Minh Ho\u00e0ng",
+      "email": "hoang.le@vnuhcm.edu.vn",
+      "password": "$2b$12$XIgsMK1urIufXMYA1wPph.1i2mHZKiyV8wXtDq1Zi3nsVEZCEVqdW",
+      "role": "admin",
+      "organization": "Ban T\u1ed5 ch\u1ee9c H\u1ed9i th\u1ea3o",
+      "phone": "0905123456",
+      "registered_events": [],
+      "created_at": "2024-12-01T08:00:00Z",
+      "updated_at": "2025-11-12T07:00:00Z"
+    },
+    {
+      "_id": "u004",
+      "name": "Ph\u1ea1m Th\u1ecb Lan",
+      "email": "lan.pham@gmail.com",
+      "password": "$2b$12$XIgsMK1urIufXMYA1wPph.1i2mHZKiyV8wXtDq1Zi3nsVEZCEVqdW",
+      "role": "attendee",
+      "organization": "C\u00f4ng ty TNHH ABC",
+      "phone": "0908765432",
+      "registered_events": [
+        "e001"
+      ],
+      "created_at": "2025-10-18T14:20:00Z",
+      "updated_at": "2025-11-10T09:15:00Z"
+    }
+  ],
+  "papers": [
+    {
+      "_id": "p001",
+      "title": "AI trong x\u1eed l\u00fd \u1ea3nh y khoa",
+      "author_ids": [
+        "u001"
+      ],
+      "abstract": "B\u00e0i b\u00e1o nghi\u00ean c\u1ee9u \u1ee9ng d\u1ee5ng Deep Learning trong ph\u00e2n t\u00edch h\u00ecnh \u1ea3nh X-quang.",
+      "keywords": [
+        "AI",
+        "Deep Learning",
+        "Y t\u1ebf"
+      ],
+      "file_url": "https://example.com/papers/ai_y_te.pdf",
+      "event_id": "e001",
+      "session_id": "s001",
+      "status": "approved",
+      "submission_date": "2025-10-15T14:30:00Z",
+      "created_at": "2025-10-15T14:30:00Z",
+      "updated_at": "2025-11-05T10:15:00Z"
+    },
+    {
+      "_id": "p002",
+      "title": "Ph\u00e2n t\u00edch d\u1eef li\u1ec7u v\u1edbi Python v\u00e0 Pandas",
+      "author_ids": [
+        "u002"
+      ],
+      "abstract": "Gi\u1edbi thi\u1ec7u c\u00e1c k\u1ef9 thu\u1eadt ph\u00e2n t\u00edch d\u1eef li\u1ec7u v\u00e0 t\u1ed1i \u01b0u hi\u1ec7u n\u0103ng v\u1edbi Pandas.",
+      "keywords": [
+        "Python",
+        "Pandas",
+        "Data Analysis"
+      ],
+      "file_url": "https://example.com/papers/python_pandas.pdf",
+      "event_id": "e002",
+      "session_id": null,
+      "status": "approved",
+      "submission_date": "2025-10-20T09:15:00Z",
+      "created_at": "2025-10-20T09:15:00Z",
+      "updated_at": "2025-11-22T12:10:55.885025+00:00"
+    },
+    {
+      "_id": "p003",
+      "title": "abc",
+      "author_ids": [
+        "u003"
+      ],
+      "abstract": "ac",
+      "keywords": [
+        "AI",
+        "ChatBot"
+      ],
+      "file_url": "d22fb996-84bc-4546-9a60-05b19a86b21b.pdf",
+      "status": "approved",
+      "session_id": null,
+      "event_id": "e002",
+      "submission_date": "2025-11-22T13:28:45.389984+00:00",
+      "created_at": "2025-11-22T13:28:45.389984+00:00",
+      "updated_at": "2025-11-22T13:28:49.800621+00:00"
+    },
+    {
+      "_id": "p004",
+      "title": "B\u00e0i b\u00e1o hay",
+      "author_ids": [
+        "u003"
+      ],
+      "abstract": "t\u00f3m t\u1eaft",
+      "keywords": [
+        "REDIS"
+      ],
+      "file_url": "efcc2538-67a8-407b-bd1f-07dbc28a7a4f.pdf",
+      "status": "revision",
+      "session_id": "s003",
+      "event_id": "e002",
+      "submission_date": "2025-11-22T13:32:46.771127+00:00",
+      "created_at": "2025-11-22T13:32:46.771127+00:00",
+      "updated_at": "2025-11-22T13:57:03.662546+00:00"
+    }
+  ],
+  "registrations": [
+    {
+      "_id": "r001",
+      "event_id": "e001",
+      "user_id": "u001",
+      "registration_date": "2025-10-20T13:00:00Z",
+      "status": "confirmed",
+      "payment_status": "paid",
+      "payment_amount": 1500000,
+      "created_at": "2025-10-20T13:00:00Z",
+      "updated_at": "2025-11-22T13:02:00.040465+00:00"
+    },
+    {
+      "_id": "r002",
+      "event_id": "e002",
+      "user_id": "u001",
+      "registration_date": "2025-11-01T09:45:00Z",
+      "status": "confirmed",
+      "payment_status": "paid",
+      "payment_amount": 1500000,
+      "created_at": "2025-11-01T09:45:00Z",
+      "updated_at": "2025-11-22T13:02:08.380456+00:00"
+    },
+    {
+      "_id": "r003",
+      "event_id": "e002",
+      "user_id": "u002",
+      "registration_date": "2025-11-05T10:20:00Z",
+      "status": "confirmed",
+      "payment_status": "paid",
+      "payment_amount": 1500000,
+      "created_at": "2025-11-05T10:20:00Z",
+      "updated_at": "2025-11-05T10:25:00Z"
+    },
+    {
+      "_id": "r004",
+      "event_id": "e001",
+      "user_id": "u004",
+      "registration_date": "2025-10-18T15:00:00Z",
+      "status": "confirmed",
+      "payment_status": "paid",
+      "payment_amount": 1500000,
+      "created_at": "2025-10-18T15:00:00Z",
+      "updated_at": "2025-10-18T15:10:00Z"
+    }
+  ],
+  "feedbacks": [
+    {
+      "_id": "f001",
+      "event_id": "e001",
+      "session_id": "s001",
+      "user_id": "u001",
+      "rating": 5,
+      "comment": "T\u1ed5 ch\u1ee9c r\u1ea5t chuy\u00ean nghi\u1ec7p, n\u1ed9i dung ch\u1ea5t l\u01b0\u1ee3ng!",
+      "created_at": "2025-12-03T10:00:00Z"
+    },
+    {
+      "_id": "f002",
+      "event_id": "e002",
+      "rating": 5,
+      "session_id": "s003",
+      "comment": "su kien hay\n",
+      "user_id": "u002",
+      "created_at": "2025-11-22T02:36:27.769554+00:00"
+    },
+    {
+      "_id": "f003",
+      "event_id": "e002",
+      "rating": 5,
+      "session_id": "s003",
+      "comment": "hay",
+      "user_id": "u001",
+      "created_at": "2025-11-22T07:56:51.202822+00:00"
+    }
+  ],
+  "events": [
+    {
+      "_id": "e001",
+      "title": "H\u1ed9i th\u1ea3o C\u00f4ng ngh\u1ec7 Tr\u00ed tu\u1ec7 Nh\u00e2n t\u1ea1o 2025",
+      "fee": 100000,
+      "description": "S\u1ef1 ki\u1ec7n quy t\u1ee5 c\u00e1c chuy\u00ean gia v\u1ec1 AI, Machine Learning, v\u00e0 \u1ee9ng d\u1ee5ng trong c\u00f4ng nghi\u1ec7p.",
+      "start_date": "2025-12-01",
+      "end_date": "2025-12-02",
+      "location": "Trung t\u00e2m H\u1ed9i ngh\u1ecb Qu\u1ed1c gia, H\u00e0 N\u1ed9i",
+      "organizer_id": "u003",
+      "max_participants": 500,
+      "current_participants": 2,
+      "status": "upcoming",
+      "created_at": "2025-09-15T10:00:00Z",
+      "updated_at": "2025-11-22T12:22:10.942833+00:00"
+    },
+    {
+      "_id": "e002",
+      "title": "test",
+      "fee": 0,
+      "description": "haha",
+      "start_date": "2025-11-02",
+      "end_date": "2025-11-11",
+      "location": "d",
+      "organizer_id": "u003",
+      "max_participants": 100333,
+      "status": "ongoing",
+      "current_participants": 0,
+      "created_at": "2025-11-22T12:44:12.907614+00:00",
+      "updated_at": "2025-11-22T12:44:12.907614+00:00"
+    }
+  ]
+}

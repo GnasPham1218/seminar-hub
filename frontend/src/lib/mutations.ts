@@ -14,6 +14,53 @@ export const LOGIN_MUTATION = gql`
   }
 `;
 
+// --- USERS  ---
+export const CREATE_USER = `
+  mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      id name email role organization phone
+    }
+  }
+`;
+
+export const UPDATE_USER = `
+  mutation UpdateUser($id: String!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id name email role organization phone updatedAt
+    }
+  }
+`;
+
+export const DELETE_USER = `
+  mutation DeleteUser($id: String!) {
+    deleteUser(id: $id)
+  }
+`;
+export const CREATE_EVENT = `
+  mutation CreateEvent($input: CreateEventInput!) {
+    createEvent(input: $input) {
+      id
+      title
+      status
+    }
+  }
+`;
+
+export const UPDATE_EVENT = `
+  mutation UpdateEvent($id: String!, $input: UpdateEventInput!) {
+    updateEvent(id: $id, input: $input) {
+      id
+      title
+      status
+    }
+  }
+`;
+
+export const DELETE_EVENT = `
+  mutation DeleteEvent($id: String!) {
+    deleteEvent(id: $id)
+  }
+`;
 export const CREATE_REGISTRATION = `
   mutation CreateRegistration($input: CreateRegistrationInput!) {
     createRegistration(input: $input) {
@@ -60,5 +107,27 @@ export const CREATE_PAPER = `
       fileUrl
       createdAt
     }
+  }
+`;
+export const UPDATE_PAPER = `
+  mutation UpdatePaper($id: String!, $input: UpdatePaperInput!) {
+    updatePaper(id: $id, input: $input) {
+      id
+      title
+      abstract
+      keywords
+      fileUrl
+      status
+      sessionId
+      eventId
+      updatedAt
+      authorIds
+    }
+  }
+`;
+
+export const DELETE_PAPER = `
+  mutation DeletePaper($id: String!) {
+    deletePaper(id: $id)
   }
 `;

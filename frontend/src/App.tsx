@@ -1,20 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import ClientLayout from './layouts/ClientLayout'
-import Home from './pages/client/Home'
-import EventList from './pages/client/Events'
-import EventDetail from './pages/client/EventDetail'
-import AdminLayout from './layouts/AdminLayout'
-import AdminDashboard from './pages/admin/Dashboard'
-import AdminEvents from './pages/admin/Events'
-import AdminRegistrations from './pages/admin/Registrations'
-import AdminPapers from './pages/admin/Papers'
-import AdminUsers from './pages/admin/Users'
-import Login from './pages/Login'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ClientLayout from "./layouts/ClientLayout";
+import Home from "./pages/client/Home";
+import EventList from "./pages/client/Events";
+import EventDetail from "./pages/client/EventDetail";
+import AdminLayout from "./layouts/AdminLayout";
+import AdminDashboard from "./pages/admin/Dashboard";
+import AdminEvents from "./pages/admin/Events";
+import AdminPapers from "./pages/admin/Papers";
+import AdminUsers from "./pages/admin/Users";
+import Login from "./pages/Login";
 import "./index.css";
-import MyRegistrations from './pages/client/MyRegistrations'
+import MyRegistrations from "./pages/client/MyRegistrations";
+import BackupRestore from "./pages/admin/BackupRestore";
 
 function App() {
-  const isAdmin = localStorage.getItem('currentUserId') === 'u003' // Admin ID
+  const isAdmin = localStorage.getItem("currentUserId") === "u003"; // Admin ID
 
   return (
     <BrowserRouter>
@@ -33,15 +33,15 @@ function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="events" element={<AdminEvents />} />
             <Route path="users" element={<AdminUsers />} />
-            <Route path="registrations" element={<AdminRegistrations />} />
             <Route path="papers" element={<AdminPapers />} />
+            <Route path="backup-restore" element={<BackupRestore />} />
           </Route>
         )}
 
         <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

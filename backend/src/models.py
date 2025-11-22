@@ -263,3 +263,4 @@ class UpdatePaperInput:
     # Các trường Admin/Reviewer có thể cập nhật
     status: Optional[str] = strawberry.UNSET
     session_id: Optional[str] = strawberry.UNSET  # Gán paper vào 1 session
+    event_id: Optional[str] = strawberry.UNSET
