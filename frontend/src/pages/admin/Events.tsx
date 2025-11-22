@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AlertCircle } from "lucide-react";
 import { client } from "../../lib/graphql";
@@ -9,6 +9,7 @@ import EventCard from "../../components/admin-events/EventCard";
 import CreateEventModal from "../../components/admin-events/CreateEventModal";
 import EventDetailModal from "../../components/admin-events/EventDetailModal";
 import DeleteConfirmModal from "../../components/admin-events/DeleteConfirmModal";
+import EditEventModal from "../../components/admin-events/EditEventModal"; // Import Modal mới
 import { GET_EVENTS } from "../../lib/queries";
 import { CREATE_EVENT, DELETE_EVENT, UPDATE_EVENT } from "../../lib/mutations";
 
@@ -22,17 +23,18 @@ export default function AdminEvents() {
   // Modal States
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState<Event | null>(null);
+
+  // 🆕 State cho Modal Sửa
+  const [editEventModal, setEditEventModal] = useState<Event | null>(null);
+
   const [deleteModal, setDeleteModal] = useState<{
     id: string;
     title: string;
   } | null>(null);
 
-  // Edit States
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<Partial<Event>>({});
+  const currentUserId = localStorage.getItem("currentUserId") || "u003";
 
   // New Event Form State
-  const currentUserId = localStorage.getItem("currentUserId") || "u003";
   const [newEvent, setNewEvent] = useState<CreateEventInput>({
     title: "",
     description: "",
@@ -99,35 +101,22 @@ export default function AdminEvents() {
     }
   };
 
-  const startEdit = (event: Event) => {
-    setEditingId(event.id);
-    setEditForm({
-      title: event.title,
-      description: event.description,
-      startDate: event.startDate.split("T")[0],
-      endDate: event.endDate.split("T")[0],
-      location: event.location,
-      maxParticipants: event.maxParticipants,
-      fee: event.fee || 0,
-      status: event.status,
-    });
+  // 🆕 Hàm mở modal sửa
+  const openEditModal = (event: Event) => {
+    setEditEventModal(event);
   };
 
-  const saveEdit = async (eventId: string) => {
+  // 🆕 Hàm xử lý cập nhật từ Modal
+  const handleUpdateEvent = async (eventId: string, data: any) => {
     try {
-      await client.request(UPDATE_EVENT, { id: eventId, input: editForm });
+      await client.request(UPDATE_EVENT, { id: eventId, input: data });
       toast.success("Cập nhật thành công!");
-      setEditingId(null);
-      fetchEvents();
+      setEditEventModal(null); // Đóng modal sau khi thành công
+      fetchEvents(); // Refresh danh sách
     } catch (err) {
+      console.error(err);
       toast.error("Cập nhật thất bại!");
     }
-  };
-
-  const cancelEdit = (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    setEditingId(null);
-    setEditForm({});
   };
 
   // DELETE HANDLERS
@@ -188,12 +177,12 @@ export default function AdminEvents() {
           <EventCard
             key={event.id}
             event={event}
-            isEditing={editingId === event.id}
-            editForm={editForm}
-            setEditForm={setEditForm}
-            onStartEdit={startEdit}
-            onSaveEdit={saveEdit}
-            onCancelEdit={cancelEdit}
+            isEditing={false} // Luôn false vì chúng ta dùng Modal
+            editForm={{}} // Không cần thiết nữa
+            setEditForm={() => {}} // Không cần thiết nữa
+            onStartEdit={openEditModal} // 🆕 Chuyển thành mở modal
+            onSaveEdit={async () => {}} // Không dùng nữa
+            onCancelEdit={() => {}} // Không dùng nữa
             onDelete={openDeleteModal}
             onViewDetail={setShowDetailModal}
           />
@@ -212,8 +201,15 @@ export default function AdminEvents() {
       <EventDetailModal
         event={showDetailModal}
         onClose={() => setShowDetailModal(null)}
-        onEdit={startEdit}
+        onEdit={openEditModal} // 🆕 Chuyển logic sửa trong chi tiết sang mở modal
         onDelete={openDeleteModal}
+      />
+
+      {/* 🆕 MODAL SỬA SỰ KIỆN */}
+      <EditEventModal
+        event={editEventModal}
+        onClose={() => setEditEventModal(null)}
+        onUpdate={handleUpdateEvent}
       />
 
       <DeleteConfirmModal

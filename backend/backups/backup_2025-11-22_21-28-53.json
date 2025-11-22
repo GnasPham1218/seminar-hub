@@ -1,0 +1,249 @@
+{
+  "sessions": [
+    {
+      "_id": "s001",
+      "event_id": "e001",
+      "title": "\u1ee8ng d\u1ee5ng AI trong Y t\u1ebf",
+      "description": "Kh\u00e1m ph\u00e1 c\u00e1c \u1ee9ng d\u1ee5ng ti\u00ean ti\u1ebfn c\u1ee7a AI trong ch\u1ea9n \u0111o\u00e1n v\u00e0 \u0111i\u1ec1u tr\u1ecb y khoa",
+      "speaker_id": "u002",
+      "start_time": "2025-12-01T09:00:00Z",
+      "end_time": "2025-12-01T10:30:00Z",
+      "room": "Ph\u00f2ng A1",
+      "topics": [
+        "AI",
+        "Healthcare"
+      ],
+      "created_at": "2025-10-01T10:00:00Z",
+      "updated_at": "2025-11-10T15:00:00Z"
+    },
+    {
+      "_id": "s002",
+      "event_id": "e001",
+      "title": "Machine Learning v\u00e0 D\u1eef li\u1ec7u l\u1edbn",
+      "description": "C\u00e1c k\u1ef9 thu\u1eadt v\u00e0 c\u00f4ng c\u1ee5 x\u1eed l\u00fd Big Data v\u1edbi Machine Learning",
+      "speaker_id": "u002",
+      "start_time": "2025-12-02T13:30:00Z",
+      "end_time": "2025-12-02T15:00:00Z",
+      "room": "Ph\u00f2ng B3",
+      "topics": [
+        "Machine Learning",
+        "Big Data"
+      ],
+      "created_at": "2025-10-01T11:00:00Z",
+      "updated_at": "2025-11-11T09:30:00Z"
+    },
+    {
+      "_id": "s003",
+      "event_id": "e002",
+      "title": "Ph\u00e2n t\u00edch d\u1eef li\u1ec7u n\u00e2ng cao v\u1edbi Python",
+      "description": "Workshop th\u1ef1c h\u00e0nh v\u1ec1 pandas, numpy v\u00e0 visualization",
+      "speaker_id": "u002",
+      "start_time": "2025-11-20T10:00:00Z",
+      "end_time": "2025-11-20T12:00:00Z",
+      "room": "H\u1ed9i tr\u01b0\u1eddng 2",
+      "topics": [
+        "Python",
+        "Data Science"
+      ],
+      "created_at": "2025-09-15T09:00:00Z",
+      "updated_at": "2025-11-20T12:30:00Z"
+    }
+  ],
+  "papers": [
+    {
+      "_id": "p001",
+      "title": "AI trong x\u1eed l\u00fd \u1ea3nh y khoa",
+      "author_ids": [
+        "u001"
+      ],
+      "abstract": "B\u00e0i b\u00e1o nghi\u00ean c\u1ee9u \u1ee9ng d\u1ee5ng Deep Learning trong ph\u00e2n t\u00edch h\u00ecnh \u1ea3nh X-quang.",
+      "keywords": [
+        "AI",
+        "Deep Learning",
+        "Y t\u1ebf"
+      ],
+      "file_url": "https://example.com/papers/ai_y_te.pdf",
+      "event_id": "e001",
+      "session_id": "s001",
+      "status": "approved",
+      "submission_date": "2025-10-15T14:30:00Z",
+      "created_at": "2025-10-15T14:30:00Z",
+      "updated_at": "2025-11-05T10:15:00Z"
+    },
+    {
+      "_id": "p002",
+      "title": "Ph\u00e2n t\u00edch d\u1eef li\u1ec7u v\u1edbi Python v\u00e0 Pandas",
+      "author_ids": [
+        "u002"
+      ],
+      "abstract": "Gi\u1edbi thi\u1ec7u c\u00e1c k\u1ef9 thu\u1eadt ph\u00e2n t\u00edch d\u1eef li\u1ec7u v\u00e0 t\u1ed1i \u01b0u hi\u1ec7u n\u0103ng v\u1edbi Pandas.",
+      "keywords": [
+        "Python",
+        "Pandas",
+        "Data Analysis"
+      ],
+      "file_url": "https://example.com/papers/python_pandas.pdf",
+      "event_id": "e002",
+      "session_id": "s003",
+      "status": "pending",
+      "submission_date": "2025-10-20T09:15:00Z",
+      "created_at": "2025-10-20T09:15:00Z",
+      "updated_at": "2025-11-10T16:20:00Z"
+    }
+  ],
+  "registrations": [
+    {
+      "_id": "r001",
+      "event_id": "e001",
+      "user_id": "u001",
+      "registration_date": "2025-10-20T13:00:00Z",
+      "status": "confirmed",
+      "payment_status": "paid",
+      "payment_amount": 1500000,
+      "created_at": "2025-10-20T13:00:00Z",
+      "updated_at": "2025-10-20T14:35:00Z"
+    },
+    {
+      "_id": "r002",
+      "event_id": "e002",
+      "user_id": "u001",
+      "registration_date": "2025-11-01T09:45:00Z",
+      "status": "confirmed",
+      "payment_status": "paid",
+      "payment_amount": 1500000,
+      "created_at": "2025-11-01T09:45:00Z",
+      "updated_at": "2025-11-21T17:05:00Z"
+    },
+    {
+      "_id": "r003",
+      "event_id": "e002",
+      "user_id": "u002",
+      "registration_date": "2025-11-05T10:20:00Z",
+      "status": "confirmed",
+      "payment_status": "paid",
+      "payment_amount": 1500000,
+      "created_at": "2025-11-05T10:20:00Z",
+      "updated_at": "2025-11-05T10:25:00Z"
+    },
+    {
+      "_id": "r004",
+      "event_id": "e001",
+      "user_id": "u004",
+      "registration_date": "2025-10-18T15:00:00Z",
+      "status": "confirmed",
+      "payment_status": "paid",
+      "payment_amount": 1500000,
+      "created_at": "2025-10-18T15:00:00Z",
+      "updated_at": "2025-10-18T15:10:00Z"
+    }
+  ],
+  "feedbacks": [
+    {
+      "_id": "f001",
+      "event_id": "e001",
+      "session_id": "s001",
+      "user_id": "u001",
+      "rating": 5,
+      "comment": "T\u1ed5 ch\u1ee9c r\u1ea5t chuy\u00ean nghi\u1ec7p, n\u1ed9i dung ch\u1ea5t l\u01b0\u1ee3ng!",
+      "created_at": "2025-12-03T10:00:00Z"
+    },
+    {
+      "_id": "f002",
+      "event_id": "e002",
+      "session_id": "s003",
+      "user_id": "u002",
+      "rating": 4,
+      "comment": "H\u1ed9i ngh\u1ecb h\u1eefu \u00edch, nh\u01b0ng \u00e2m thanh h\u01a1i nh\u1ecf.",
+      "created_at": "2025-11-21T18:30:00Z"
+    }
+  ],
+  "events": [
+    {
+      "_id": "e001",
+      "title": "H\u1ed9i th\u1ea3o C\u00f4ng ngh\u1ec7 Tr\u00ed tu\u1ec7 Nh\u00e2n t\u1ea1o 2025",
+      "fee": 1500000,
+      "description": "S\u1ef1 ki\u1ec7n quy t\u1ee5 c\u00e1c chuy\u00ean gia v\u1ec1 AI, Machine Learning, v\u00e0 \u1ee9ng d\u1ee5ng trong c\u00f4ng nghi\u1ec7p.",
+      "start_date": "2025-12-01T08:00:00Z",
+      "end_date": "2025-12-02T17:00:00Z",
+      "location": "Trung t\u00e2m H\u1ed9i ngh\u1ecb Qu\u1ed1c gia, H\u00e0 N\u1ed9i",
+      "organizer_id": "u003",
+      "max_participants": 500,
+      "current_participants": 2,
+      "status": "upcoming",
+      "created_at": "2025-09-15T10:00:00Z",
+      "updated_at": "2025-11-10T14:30:00Z"
+    },
+    {
+      "_id": "e002",
+      "title": "H\u1ed9i ngh\u1ecb Khoa h\u1ecdc M\u00e1y t\u00ednh M\u1edf R\u1ed9ng",
+      "fee": 500000,
+      "description": "Chia s\u1ebb c\u00e1c nghi\u00ean c\u1ee9u m\u1edbi trong l\u0129nh v\u1ef1c Khoa h\u1ecdc m\u00e1y t\u00ednh v\u00e0 H\u1ec7 th\u1ed1ng th\u00f4ng tin.",
+      "start_date": "2025-11-20T09:00:00Z",
+      "end_date": "2025-11-21T16:00:00Z",
+      "location": "\u0110\u1ea1i h\u1ecdc Qu\u1ed1c Gia TP.HCM",
+      "organizer_id": "u003",
+      "max_participants": 300,
+      "current_participants": 2,
+      "status": "ongoing",
+      "created_at": "2025-08-10T08:00:00Z",
+      "updated_at": "2025-11-20T09:15:00Z"
+    }
+  ],
+  "users": [
+    {
+      "_id": "u001",
+      "name": "Nguy\u1ec5n V\u0103n An",
+      "email": "an.nguyen@hust.edu.vn",
+      "password": "$2b$12$XIgsMK1urIufXMYA1wPph.1i2mHZKiyV8wXtDq1Zi3nsVEZCEVqdW",
+      "role": "researcher",
+      "organization": "\u0110\u1ea1i h\u1ecdc B\u00e1ch Khoa H\u00e0 N\u1ed9i",
+      "phone": "0987654321",
+      "registered_events": [
+        "e001",
+        "e002"
+      ],
+      "created_at": "2025-01-15T10:30:00Z",
+      "updated_at": "2025-11-10T14:20:00Z"
+    },
+    {
+      "_id": "u002",
+      "name": "Tr\u1ea7n Th\u1ecb B\u00ecnh",
+      "email": "binh.tran@hcmus.edu.vn",
+      "password": "$2b$12$XIgsMK1urIufXMYA1wPph.1i2mHZKiyV8wXtDq1Zi3nsVEZCEVqdW",
+      "role": "speaker",
+      "organization": "\u0110\u1ea1i h\u1ecdc Khoa h\u1ecdc T\u1ef1 nhi\u00ean TP.HCM",
+      "phone": "0912345678",
+      "registered_events": [
+        "e002"
+      ],
+      "created_at": "2025-02-20T09:00:00Z",
+      "updated_at": "2025-11-11T16:45:00Z"
+    },
+    {
+      "_id": "u003",
+      "name": "L\u00ea Minh Ho\u00e0ng",
+      "email": "hoang.le@vnuhcm.edu.vn",
+      "password": "$2b$12$XIgsMK1urIufXMYA1wPph.1i2mHZKiyV8wXtDq1Zi3nsVEZCEVqdW",
+      "role": "admin",
+      "organization": "Ban T\u1ed5 ch\u1ee9c H\u1ed9i th\u1ea3o",
+      "phone": "0905123456",
+      "registered_events": [],
+      "created_at": "2024-12-01T08:00:00Z",
+      "updated_at": "2025-11-12T07:00:00Z"
+    },
+    {
+      "_id": "u004",
+      "name": "Ph\u1ea1m Th\u1ecb Lan",
+      "email": "lan.pham@gmail.com",
+      "password": "$2b$12$XIgsMK1urIufXMYA1wPph.1i2mHZKiyV8wXtDq1Zi3nsVEZCEVqdW",
+      "role": "attendee",
+      "organization": "C\u00f4ng ty TNHH ABC",
+      "phone": "0908765432",
+      "registered_events": [
+        "e001"
+      ],
+      "created_at": "2025-10-18T14:20:00Z",
+      "updated_at": "2025-11-10T09:15:00Z"
+    }
+  ]
+}

@@ -8,10 +8,11 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminEvents from "./pages/admin/Events";
 import AdminPapers from "./pages/admin/Papers";
 import AdminUsers from "./pages/admin/Users";
-import Login from "./pages/Login";
+
 import "./index.css";
 import MyRegistrations from "./pages/client/MyRegistrations";
 import BackupRestore from "./pages/admin/BackupRestore";
+import Login from "./pages/auth/Login";
 
 function App() {
   const isAdmin = localStorage.getItem("currentUserId") === "u003"; // Admin ID

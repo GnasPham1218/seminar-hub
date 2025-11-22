@@ -158,3 +158,26 @@ export const GET_PAPERS = `
     }
   }
 `;
+export const GET_EVENT_REGISTRATIONS = `
+  query GetEventRegistrations($eventId: String!, $page: Int, $limit: Int) {
+    registrations(eventId: $eventId, page: $page, limit: $limit) {
+      registrations {
+        id
+        status
+        paymentStatus
+        registrationDate
+        user {
+          id
+          name
+          email
+          role
+          phone
+          organization
+        }
+      }
+      pageInfo {
+        totalCount
+      }
+    }
+  }
+`;
