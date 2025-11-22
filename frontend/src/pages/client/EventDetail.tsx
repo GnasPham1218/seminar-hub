@@ -2,7 +2,12 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { client } from "../../lib/graphql";
-import { GET_EVENT, CHECK_REGISTRATION } from "../../lib/queries";
+import {
+  GET_EVENT,
+  CHECK_REGISTRATION,
+  GET_EVENT_SESSIONS,
+  GET_EVENT_FEEDBACKS,
+} from "../../lib/queries";
 import {
   CREATE_REGISTRATION,
   UPDATE_REGISTRATION,
@@ -14,10 +19,14 @@ import EventActions from "../../components/event-details/EventActions";
 import EventSidebar from "../../components/event-details/EventSidebar";
 import PaymentModal from "../../components/event-details/PaymentModal";
 import CancelModal from "../../components/event-details/CancelModal";
+import SessionList from "../../components/event-details/SessionList";
+import FeedbackList from "../../components/event-details/FeedbackList";
 
 export default function EventDetail() {
   const { id } = useParams();
   const [event, setEvent] = useState<any>(null);
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [myRegistration, setMyRegistration] = useState<any>(null);
 
@@ -30,9 +39,20 @@ export default function EventDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // 1. Lấy thông tin Event
         const eventData = await client.request(GET_EVENT, { id });
         setEvent(eventData.event);
 
+        // 2. Lấy Sessions và Feedbacks song song để tối ưu tốc độ
+        const [sessionsData, feedbacksData] = await Promise.all([
+          client.request(GET_EVENT_SESSIONS, { eventId: id }),
+          client.request(GET_EVENT_FEEDBACKS, { eventId: id }),
+        ]);
+
+        setSessions(sessionsData.sessions?.sessions || []);
+        setFeedbacks(feedbacksData.feedbacks?.feedbacks || []);
+
+        // 3. Kiểm tra đăng ký của user hiện tại
         const currentUserId = localStorage.getItem("currentUserId");
         if (currentUserId) {
           const regData = await client.request(CHECK_REGISTRATION, {
@@ -155,6 +175,10 @@ export default function EventDetail() {
             onOpenCancel={() => setShowCancelModal(true)}
             onBack={() => window.history.back()}
           />
+          <div className="border-t border-gray-100 pt-8 mt-8">
+            <SessionList sessions={sessions} />
+            <FeedbackList feedbacks={feedbacks} />
+          </div>
         </div>
 
         {/* Cột phải: Sidebar */}

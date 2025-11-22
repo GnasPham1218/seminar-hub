@@ -186,6 +186,17 @@ class FeedbackType:
     session_id: Optional[str]
     comment: Optional[str]
 
+    @strawberry.field
+    async def user(self, info: Context) -> Optional[UserType]:
+        """Lấy thông tin chi tiết người dùng đã viết feedback"""
+        db = get_db(info)
+        # Gọi hàm crud lấy user theo ID (đã có sẵn trong crud.py)
+        user_data = await crud.get_user_by_id(db, self.user_id)
+
+        if user_data:
+            return _to_type(User, user_data, UserType)
+        return None
+
 
 @strawberry.type
 class PaperType:
@@ -302,12 +313,25 @@ class Query:
     # --- Sessions ---
     @strawberry.field
     async def sessions(
-        self, info: Context, page: int = 1, limit: int = 10
+        self,
+        info: Context,
+        page: int = 1,
+        limit: int = 10,
+        event_id: Optional[str] = None,
     ) -> SessionPage:
         db = get_db(info)
-        items, total_count, total_pages = await _resolve_paginated(
-            db, crud.get_sessions, Session, SessionType, page, limit
+        page_num, limit_num, skip = get_pagination(page, limit)
+
+        # 2. Gọi hàm CRUD (Lưu ý: bạn cần cập nhật crud.get_sessions bên file crud.py để nhận event_id)
+        # Thay vì dùng _resolve_paginated, ta gọi trực tiếp để truyền thêm tham số
+        items_data, total_count = await crud.get_sessions(
+            db, skip=skip, limit=limit_num, event_id=event_id
         )
+
+        # 3. Tính toán page info
+        total_pages = math.ceil(total_count / limit_num) if limit_num > 0 else 1
+        items = [_to_type(Session, d, SessionType) for d in items_data]
+
         page_info = PageInfo(
             total_count=total_count,
             total_pages=total_pages,
@@ -366,12 +390,24 @@ class Query:
     # --- Feedbacks ---
     @strawberry.field
     async def feedbacks(
-        self, info: Context, page: int = 1, limit: int = 10
+        self,
+        info: Context,
+        page: int = 1,
+        limit: int = 10,
+        event_id: Optional[str] = None,  # <--- THÊM THAM SỐ NÀY
     ) -> FeedbackPage:
         db = get_db(info)
-        items, total_count, total_pages = await _resolve_paginated(
-            db, crud.get_feedbacks, Feedback, FeedbackType, page, limit
+
+        page_num, limit_num, skip = get_pagination(page, limit)
+
+        # Gọi hàm CRUD (Cần cập nhật crud.get_feedbacks bên file crud.py)
+        items_data, total_count = await crud.get_feedbacks(
+            db, skip=skip, limit=limit_num, event_id=event_id
         )
+
+        total_pages = math.ceil(total_count / limit_num) if limit_num > 0 else 1
+        items = [_to_type(Feedback, d, FeedbackType) for d in items_data]
+
         page_info = PageInfo(
             total_count=total_count,
             total_pages=total_pages,

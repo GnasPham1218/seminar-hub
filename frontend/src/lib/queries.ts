@@ -1,4 +1,3 @@
-// Tất cả query/mutation chính
 export const GET_EVENTS = `
   query Events($page: Int!, $limit: Int!) {
     events(page: $page, limit: $limit) {
@@ -14,6 +13,41 @@ export const GET_EVENT = `
   query Event($id: String!) {
     event(id: $id) {
       id title fee description startDate endDate location status maxParticipants currentParticipants
+    }
+  }
+`;
+
+export const GET_EVENT_SESSIONS = `
+  query GetEventSessions($eventId: String!) {
+    sessions(eventId: $eventId, page: 1, limit: 100) {
+      sessions {
+        id
+        title
+        description
+        speakerId
+        startTime
+        endTime
+        room
+        topics
+      }
+    }
+  }
+`;
+
+export const GET_EVENT_FEEDBACKS = `
+  query GetEventFeedbacks($eventId: String!) {
+    feedbacks(eventId: $eventId, page: 1, limit: 50) {
+      feedbacks {
+        id
+        userId
+        rating
+        comment
+        createdAt
+        user {
+          id
+          name
+        }
+      }
     }
   }
 `;
@@ -53,7 +87,6 @@ export const GET_MY_REGISTRATIONS = `
   }
 `;
 
-// Thêm vào cuối file queries.ts
 export const GET_USERS = `
   query { users(page: 1, limit: 100) { users { id name email role organization phone } } }
 `;
