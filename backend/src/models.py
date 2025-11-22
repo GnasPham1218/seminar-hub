@@ -31,6 +31,7 @@ class Event(BaseModel):
     organizer_id: str
     max_participants: int
     current_participants: int
+    fee: Optional[int] = 0
     status: str
     created_at: str
     updated_at: str
